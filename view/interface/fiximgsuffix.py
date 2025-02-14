@@ -4,10 +4,17 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
 
+import filetype
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
-                            PushButton, TextEdit)
+from qfluentwidgets import (
+    BodyLabel,
+    InfoBar,
+    InfoBarPosition,
+    ProgressBar,
+    PushButton,
+    TextEdit,
+)
 
 from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEditDir
@@ -26,25 +33,6 @@ class FixWorker(QThread):
         super().__init__()
         self.root_dir = root_dir
 
-    @staticmethod
-    def detect_format(file_path: Path) -> Optional[str]:
-        """
-        使用 file 命令检测文件格式
-        :param file_path: 要检测的文件路径
-        :return: MIME类型字符串，如果检测失败返回None
-        """
-        result = subprocess.run(
-            [
-                "file",
-                "--mime-type",
-                str(file_path),
-            ],
-            capture_output=True,
-            text=True,
-        )
-        mime_type = result.stdout.split(":")[-1].strip()
-        return mime_type
-
     @override
     def run(self):
         # 记录开始时间
@@ -60,7 +48,11 @@ class FixWorker(QThread):
                 self.setProgressInfo.emit(idx + 1, len(files))
 
                 # 检测文件格式
-                mime_type = self.detect_format(file_path)
+                mime_type = filetype.guess_mime(str(file_path))
+                if mime_type is None:
+                    self.logInfo.emit(f"文件格式检测失败: {file_path}")
+                    continue
+
                 target_format = mime_type.split("/")[-1]
 
                 if mime_type == "image/jpeg" and file_path.suffix == ".jpg":
@@ -75,12 +67,12 @@ class FixWorker(QThread):
                 # 重命名文件
                 file_path.rename(target_path)
 
-                # 记录处理时间
-                self.logInfo.emit(f"\n耗时: {datetime.now() - start_time}")
-
             except Exception as e:
                 self.logInfo.emit(f"处理失败: {file_path} - {str(e)}")
                 continue
+
+        # 记录处理时间
+        self.logInfo.emit(f"\n耗时: {datetime.now() - start_time}")
 
 
 class FixImageSuffixInterface(GalleryInterface):
