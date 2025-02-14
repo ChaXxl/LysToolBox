@@ -1,0 +1,8 @@
+*.onnx
+*.pt
+.DS_Store
+.idea
+
+temp
+__pycache__
+data/config.json

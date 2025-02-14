@@ -1,0 +1,15 @@
+httpx
+drissionpage
+PySide6
+tqdm
+PySide6-Fluent-Widgets
+numpy
+openpyxl
+opencv-python
+onnxruntime
+# onnxruntime-gpu
+pandas
+loguru
+imageio
+shortuuid
+psycopg[binary,pool]

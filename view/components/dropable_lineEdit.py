@@ -1,0 +1,112 @@
+from pathlib import Path
+from typing import overload, override
+
+from qfluentwidgets import LineEdit
+
+
+class DropableLineEdit(LineEdit):
+    def __init__(self):
+        super().__init__()
+        self.acceptDrops()
+
+    @override
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    @override
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                url = urls[0]
+                self.setText(url.toLocalFile())
+        else:
+            event.ignore()
+
+
+class DropableLineEditDir(DropableLineEdit):
+    def __init__(self):
+        super().__init__()
+        self.acceptDrops()
+
+    @override
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    @override
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+
+            if not urls:
+                return
+
+            url = urls[0]
+
+            if not Path(url.toLocalFile()).is_dir():
+                return
+
+            self.setText(url.toLocalFile())
+
+        else:
+            event.ignore()
+
+
+class DropableLineEditOnnx(LineEdit):
+    def __init__(self):
+        super().__init__()
+        self.acceptDrops()
+
+    @override
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    @override
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                filename = urls[0].toLocalFile()
+
+                if not filename.endswith(".onnx"):
+                    return
+
+                self.setText(filename)
+        else:
+            event.ignore()
+
+
+class DropableLineEditExcel(LineEdit):
+    def __init__(self):
+        super().__init__()
+        self.acceptDrops()
+
+    @override
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    @override
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if urls:
+                filename = urls[0].toLocalFile()
+
+                if not filename.endswith(".xlsx"):
+                    return
+
+                self.setText(filename)
+        else:
+            event.ignore()
