@@ -27,7 +27,7 @@ class DeleteRowWorker(QThread):
     def getPicList(self, folder: Path) -> set:
         """获取文件夹下的图片列表"""
         try:
-            pic_list = {img.stem for img in folder.glob("*")}
+            pic_list = {img.stem.split("_")[-1] for img in folder.glob("*")}
             return pic_list
         except Exception as e:
             self.logInfo.emit(f"{folder.stem} 获取图片列表失败: {e}")
