@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
 
+import filetype
 import imageio.v3 as iio
 from PIL import Image
 from PySide6.QtCore import Qt, QThread, Signal, Slot
@@ -38,25 +39,6 @@ class TransferWorker(QThread):
         self.total = 0
 
     @staticmethod
-    def detect_format(file_path: Path) -> Optional[str]:
-        """
-        使用 file 命令检测文件格式
-        :param file_path: 要检测的文件路径
-        :return: MIME类型字符串，如果检测失败返回None
-        """
-        result = subprocess.run(
-            [
-                "file",
-                "--mime-type",
-                str(file_path),
-            ],
-            capture_output=True,
-            text=True,
-        )
-        mime_type = result.stdout.split(":")[-1].strip()
-        return mime_type
-
-    @staticmethod
     def fill_transparent_background(img: Image.Image) -> Image.Image:
         """
         为带有透明通道的图片添加白色背景
@@ -87,7 +69,11 @@ class TransferWorker(QThread):
                 self.setProgressInfo.emit(self.cur, self.total)
 
                 # 检测文件格式
-                mime_type = self.detect_format(file_path)
+                mime_type = filetype.guess_mime(str(file_path))
+                if mime_type is None:
+                    self.logInfo.emit(f"文件格式检测失败: {file_path}")
+                    continue
+
                 target_format = mime_type.split("/")[-1]
 
                 if mime_type == "image/jpeg" and file_path.suffix == ".jpg":
@@ -119,7 +105,10 @@ class TransferWorker(QThread):
                 self.setProgressInfo.emit(self.cur, self.total)
 
                 # 检测文件格式
-                mime_type = self.detect_format(file_path)
+                mime_type = filetype.guess_mime(str(file_path))
+                if mime_type is None:
+                    self.logInfo.emit(f"文件格式检测失败: {file_path}")
+                    continue
 
                 # 构造目标文件路径
                 target_path = file_path.with_suffix(".jpg")
@@ -174,6 +163,7 @@ class TransferWorker(QThread):
 
             except Exception as e:
                 self.logInfo.emit(f"出错 - {e}")
+                continue
 
             else:
                 if target_path.exists():
