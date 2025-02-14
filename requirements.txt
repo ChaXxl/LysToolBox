@@ -13,3 +13,5 @@ loguru
 imageio
 shortuuid
 psycopg[binary,pool]
+# python-magic
+filetype
