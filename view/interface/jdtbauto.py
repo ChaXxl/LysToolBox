@@ -37,8 +37,7 @@ class JdTbWorker(QThread):
         self.tb = TB(self.output_dir)
 
         # 连接 JD 和 TB 中的 logInfo 信号到 JdTbWorker 的 logInfo 信号
-        self.jd.logInfo.connect(self.logInfo.emit)
-        self.tb.logInfo.connect(self.logInfo.emit)
+        self.jd.logInfo = self.tb.logInfo = self.logInfo
 
     @override
     def run(self):
@@ -55,8 +54,8 @@ class JdTbWorker(QThread):
         }
 
         for idx, keyword in enumerate(keywords):
-            self.setProgress((idx + 1) // len(keywords) * 100)
-            self.setProgressInfo(idx + 1, len(keywords))
+            self.setProgress.emit((idx + 1) // len(keywords) * 100)
+            self.setProgressInfo.emit(idx + 1, len(keywords))
 
             self.jd.search(keyword)
 
@@ -224,7 +223,7 @@ class JdTBbAutoInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "图片识别完成 ✅")
+        self.createSuccessInfoBar("完成", "完成 ✅")
 
     def start(self):
         self.textEdit_log.clear()
