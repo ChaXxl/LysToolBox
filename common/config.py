@@ -3,9 +3,16 @@ import sys
 from enum import Enum
 
 from PySide6.QtCore import QLocale
-from qfluentwidgets import (BoolValidator, ConfigItem, ConfigSerializer,
-                            FolderValidator, QConfig, RangeValidator, Theme,
-                            qconfig)
+from qfluentwidgets import (
+    BoolValidator,
+    ConfigItem,
+    ConfigSerializer,
+    FolderValidator,
+    QConfig,
+    RangeValidator,
+    Theme,
+    qconfig,
+)
 
 from utils.validator import IPValidator
 

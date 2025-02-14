@@ -5,8 +5,7 @@ from typing import Optional, Union, override
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtGui import QDropEvent
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, PushButton,
-                            TextEdit)
+from qfluentwidgets import BodyLabel, InfoBar, InfoBarPosition, PushButton, TextEdit
 
 from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEdit
