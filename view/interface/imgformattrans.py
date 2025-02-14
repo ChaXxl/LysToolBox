@@ -110,64 +110,44 @@ class TransferWorker(QThread):
                     self.logInfo.emit(f"文件格式检测失败: {file_path}")
                     continue
 
+                # 如果已经是 jpg 格式，跳过
+                if mime_type in ("image/jpeg", "image/jpg") and file_path.suffix.lower() == ".jpg":
+                    continue
+                
+                # 如果是 jpeg 后缀，直接重命名为 jpg
+                if mime_type == "image/jpeg" and file_path.suffix.lower() == ".jpeg":
+                    file_path.rename(file_path.with_suffix(".jpg"))
+                    continue
+                
                 # 构造目标文件路径
                 target_path = file_path.with_suffix(".jpg")
 
-                # 根据不同的文件类型进行相应的转换处理
-                match mime_type:
-                    case "image/webp":
-                        try:
-                            with Image.open(file_path) as img:
-                                img.convert("RGB").save(
-                                    target_path, "JPEG", quality=100
-                                )
+                # 根据不同的文件类型进行相应的转换处理. 处理图片转换
+                if mime_type == "image/webp":
+                    try:
+                        self._convert_image(file_path, target_path)
+                    except Exception:
+                        # webp 特殊处理失败时使用 imageio
+                        img = iio.imread(file_path, index=0)
+                        iio.imwrite(target_path, img)
+                else:
+                    self._convert_image(file_path, target_path)
 
-                        except Exception as e:
-                            if mime_type == "image/webp":
-                                img = iio.imread(file_path, index=0)
-                                iio.imwrite(target_path, img)
-
-                    case "image/avif":
-                        with Image.open(file_path) as img:
-                            img.convert("RGB").save(target_path, "JPEG", quality=100)
-
-                    case "image/png":
-                        with Image.open(file_path) as img:
-                            img = self.fill_transparent_background(img)
-                            img.convert("RGB").save(target_path, "JPEG", quality=100)
-
-                    case "image/jpeg":
-                        if file_path.suffix.lower() == ".jpg":
-                            continue
-
-                        if file_path.suffix.lower() == ".jpeg":
-                            file_path.rename(file_path.with_suffix(".jpg"))
-                            continue
-
-                        with Image.open(file_path) as img:
-                            img.save(target_path, "JPEG", quality=100)
-
-                    case "image/jpg":
-                        if file_path.suffix.lower() == ".jpg":
-                            continue
-
-                        with Image.open(file_path) as img:
-                            img.save(target_path, "JPEG", quality=100)
-
-                    case _:
-                        self.logInfo.emit(
-                            f"不支持的文件格式: {file_path} ({mime_type})"
-                        )
-                        continue
+                # 转换成功后删除源文件
+                if target_path.exists():
+                    file_path.unlink(missing_ok=True) 
 
             except Exception as e:
                 self.logInfo.emit(f"出错 - {e}")
-                continue
 
-            else:
-                if target_path.exists():
-                    # 转换成功后删除源文件
-                    file_path.unlink(missing_ok=True)
+    def _convert_image(self, source_path: Path, target_path: Path):
+        """
+        统一的图片转换处理函数
+        """
+        with Image.open(source_path) as img:
+            if img.mode in ("RGBA", "LA"):
+                img = self.fill_transparent_background(img)
+            img.convert("RGB").save(target_path, "JPEG", quality=100)
 
     @override
     def run(self):
