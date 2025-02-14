@@ -1,4 +1,5 @@
 # coding:utf-8
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import override
@@ -67,6 +68,8 @@ class DeleteRowWorker(QThread):
 
     @override
     def run(self):
+        start_time = datetime.now()
+
         with ThreadPoolExecutor() as t:
             futures = []
 
@@ -95,6 +98,8 @@ class DeleteRowWorker(QThread):
         self.logInfo.emit(
             f"\n共有 {self.total_rows} 行, 删除了 {self.deleted_rows} 行, 还剩 {self.total_rows - self.deleted_rows} 行"
         )
+
+        self.logInfo.emit(f"\n耗时: {datetime.now() - start_time}")
 
 
 class DeleteRowInterface(GalleryInterface):
