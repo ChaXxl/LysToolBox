@@ -1,9 +1,9 @@
 # coding:utf-8
-import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
 
+import pillow_avif
 import filetype
 import imageio.v3 as iio
 from PIL import Image
@@ -118,7 +118,6 @@ class TransferWorker(QThread):
                     case "image/webp":
                         try:
                             with Image.open(file_path) as img:
-                                # 转换为 JPEG 格式并保存
                                 img.convert("RGB").save(
                                     target_path, "JPEG", quality=100
                                 )
@@ -129,8 +128,8 @@ class TransferWorker(QThread):
                                 iio.imwrite(target_path, img)
 
                     case "image/avif":
-                        # 使用 avifdec 将 avif 文件转换为 png, 再将 png 转换为 jpg
-                        subprocess.run(["avifdec", str(file_path), str(target_path)])
+                        with Image.open(file_path) as img:
+                            img.convert("RGB").save(target_path, "JPEG", quality=100)
 
                     case "image/png":
                         with Image.open(file_path) as img:
