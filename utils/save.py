@@ -88,6 +88,6 @@ class Save:
 
         workBook.save(self.filename)
 
-        msg = f"\n\n{self.filename.stem} {tag}-保存了{i - 1}条, 数据总条数: {sheet.max_row - 1}\n\n"
+        msg = f"\n{self.filename.stem} {tag}-保存了{i - 1}条, 数据总条数: {sheet.max_row - 1}\n\n"
         self.logInfo.emit(msg)
         logger.success(msg)
