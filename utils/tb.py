@@ -129,7 +129,7 @@ class TB:
         filename = self.save_dir / f"{self.keyword}.xlsx"
 
         self.save = Save(filename)
-        self.save.logInfo.connect(self.logInfo)
+        self.save.logInfo = self.logInfo
 
         tab = self.bro.latest_tab
 
@@ -138,14 +138,10 @@ class TB:
             "h5api.m.taobao.com/h5/mtop.relationrecommend.wirelessrecommend.recommend/2.0"
         )
 
-        # logger.info("开始监听搜索结果...")
-
-        # logger.info("\n\n打开淘宝首页")
         self.logInfo.emit("\n\n打开淘宝首页")
-        tab.get("https://www.taobao.com/")
-        # tab.get(
-        #     f"https://s.taobao.com/search?commend=all&ie=utf8&initiative_id=tbindexz_20170306&page=1&preLoadOrigin=https%3A%2F%2Fwww.taobao.com&q={self.keyword}&search_type=item&sourceId=tb.index&spm=a21bo.jianhua%2Fa.201856.d13&ssid=s5-e&tab=all"
-        # )
+        tab.get(
+            f"https://s.taobao.com/search?commend=all&ie=utf8&initiative_id=tbindexz_20170306&page=1&preLoadOrigin=https%3A%2F%2Fwww.taobao.com&q={self.keyword}&search_type=item&sourceId=tb.index&spm=a21bo.jianhua%2Fa.201856.d13&ssid=s5-e&tab=all"
+        )
 
         try:
             # 检测是否有弹窗
@@ -169,19 +165,6 @@ class TB:
 
         while tab.ele("#nocaptcha", timeout=0.5):
             ...
-
-        # # 输入搜索关键字
-        # logger.info(f"搜索关键字: {self.keyword}")
-        self.logInfo.emit(f"搜索关键字: {self.keyword}")
-        ele_input = tab.ele("#q", timeout=60)
-        ele_input.click()
-        ele_input.input(self.keyword)
-
-        # # 点击搜索按钮
-        # logger.info("点击搜索按钮")
-        self.logInfo.emit("点击搜索按钮")
-        ele_search = tab.ele("@@tag()=button@@text()=搜索", timeout=1)
-        ele_search.click()
 
         while tab.ele("text:验证码", timeout=0.5):
             ...

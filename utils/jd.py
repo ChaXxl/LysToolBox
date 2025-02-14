@@ -209,7 +209,7 @@ class JD:
         filename = self.save_dir / f"{self.keyword}.xlsx"
 
         self.save = Save(filename)
-        self.save.logInfo.connect(self.logInfo)
+        self.save.logInfo = self.logInfo
 
         tab = self.bro.latest_tab
 
