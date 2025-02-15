@@ -98,6 +98,9 @@ class Config(QConfig):
 
     fiximgsuffix_excel_path = ConfigItem("FixImgSuffix", "ExcelPath", "", "")
 
+    # 合并 Excel 文件
+    mergedExcelFiles_excel_path = ConfigItem("MergedExcelFiles", "ExcelPath", "", FolderValidator())
+    mergedExcelFiles_output_path = ConfigItem("MergedExcelFiles", "OutputPath", "", FolderValidator())
 
 YEAR = 2024
 AUTHOR = "ChaChaL"
