@@ -1,4 +1,5 @@
 # coding:utf-8
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
@@ -38,6 +39,19 @@ class TransferWorker(QThread):
         self.cur = 0
         self.total = 0
 
+        # 添加文件缓存
+        self._files_cache = []
+
+    def _scan_files(self):
+        """扫描所有支持的图片文件并缓存结果"""
+        if not self._files_cache:
+            self._files_cache = [
+                f
+                for f in self.root_dir.rglob("*")
+                if f.suffix.lower() in self.SUPPORTED_FORMATS
+            ]
+        return self._files_cache
+
     @staticmethod
     def fill_transparent_background(img: Image.Image) -> Image.Image:
         """
@@ -55,90 +69,48 @@ class TransferWorker(QThread):
             return background
         return img
 
-    def fixSuffix(self):
-        files = [
-            f for f in self.root_dir.rglob("*") if f.suffix in self.SUPPORTED_FORMATS
-        ]
+    def process_file(self, file_path: Path) -> None:
+        """统一处理单个文件的逻辑"""
+        try:
+            # 更新进度
+            self.cur += 1
+            val = int(self.cur / self.total * 100)
+            self.setProgress.emit(val)
+            self.setProgressInfo.emit(self.cur, self.total)
 
-        for file_path in files:
-            try:
-                # 更新进度条
-                self.cur += 0.5
-                val = int(self.cur / self.total * 100)
-                self.setProgress.emit(val)
-                self.setProgressInfo.emit(self.cur, self.total)
+            # 检测文件格式
+            mime_type = filetype.guess_mime(str(file_path))
+            if mime_type is None:
+                self.logInfo.emit(f"文件格式检测失败: {file_path}")
+                return
 
-                # 检测文件格式
-                mime_type = filetype.guess_mime(str(file_path))
-                if mime_type is None:
-                    self.logInfo.emit(f"文件格式检测失败: {file_path}")
-                    continue
-
-                target_format = mime_type.split("/")[-1]
-
-                if mime_type == "image/jpeg" and file_path.suffix == ".jpg":
-                    continue
-
-                if file_path.suffix == f".{target_format}":
-                    continue
-
-                # 构造目标文件路径
-                target_path = file_path.with_suffix(f".{target_format}")
-
-                # 重命名文件
-                file_path.rename(target_path)
-
-            except Exception as e:
-                self.logInfo.emit(f"修改后缀失败: {file_path} - {str(e)}")
-
-    def convert(self):
-        files = [
-            f for f in self.root_dir.rglob("*") if f.suffix in self.SUPPORTED_FORMATS
-        ]
-
-        for file_path in files:
-            try:
-                # 更新进度条
-                self.cur += 0.5
-                val = int(self.cur / self.total * 100)
-                self.setProgress.emit(val)
-                self.setProgressInfo.emit(self.cur, self.total)
-
-                # 检测文件格式
-                mime_type = filetype.guess_mime(str(file_path))
-                if mime_type is None:
-                    self.logInfo.emit(f"文件格式检测失败: {file_path}")
-                    continue
-
-                # 如果已经是 jpg 格式，跳过
-                if mime_type in ("image/jpeg", "image/jpg") and file_path.suffix.lower() == ".jpg":
-                    continue
-                
-                # 如果是 jpeg 后缀，直接重命名为 jpg
-                if mime_type == "image/jpeg" and file_path.suffix.lower() == ".jpeg":
+            # 处理 JPEG 文件
+            if mime_type == "image/jpeg":
+                if file_path.suffix.lower() == ".jpeg":
                     file_path.rename(file_path.with_suffix(".jpg"))
-                    continue
-                
-                # 构造目标文件路径
+                return
+
+            # 处理需要转换的文件
+            if mime_type != "image/jpeg":
                 target_path = file_path.with_suffix(".jpg")
-
-                # 根据不同的文件类型进行相应的转换处理. 处理图片转换
-                if mime_type == "image/webp":
-                    try:
+                try:
+                    if mime_type == "image/webp":
+                        try:
+                            self._convert_image(file_path, target_path)
+                        except Exception:
+                            img = iio.imread(file_path, index=0)
+                            iio.imwrite(target_path, img)
+                    else:
                         self._convert_image(file_path, target_path)
-                    except Exception:
-                        # webp 特殊处理失败时使用 imageio
-                        img = iio.imread(file_path, index=0)
-                        iio.imwrite(target_path, img)
-                else:
-                    self._convert_image(file_path, target_path)
 
-                # 转换成功后删除源文件
-                if target_path.exists():
-                    file_path.unlink(missing_ok=True) 
+                    # 转换成功后删除源文件
+                    if target_path.exists():
+                        file_path.unlink(missing_ok=True)
+                except Exception as e:
+                    self.logInfo.emit(f"转换失败: {file_path} - {str(e)}")
 
-            except Exception as e:
-                self.logInfo.emit(f"出错 - {e}")
+        except Exception as e:
+            self.logInfo.emit(f"处理失败: {file_path} - {str(e)}")
 
     def _convert_image(self, source_path: Path, target_path: Path):
         """
@@ -153,30 +125,27 @@ class TransferWorker(QThread):
     def run(self):
         start = datetime.now()
 
-        files = [
-            f for f in self.root_dir.rglob("*") if f.suffix in self.SUPPORTED_FORMATS
-        ]
+        # 扫描文件并缓存
+        files = self._scan_files()
 
         # 统计总共有多少张图片要处理
         self.total = len(files)
-        self.setProgressInfo.emit(0, self.total)
 
-        count_before = len(files)
+        count_before = self.total
+
+        self.setProgressInfo.emit(0, self.total)
         self.logInfo.emit(f"共有 {count_before} 张图片\n")
 
-        # 修改后缀
-        self.fixSuffix()
+        # 使用多线程处理文件
+        with ThreadPoolExecutor(max_workers=min(32, (self.total + 3) // 4)) as t:
+            list(t.map(self.process_file, files))
 
-        # 转换格式
-        self.convert()
-
-        files = [
-            f for f in self.root_dir.rglob("*") if f.suffix in self.SUPPORTED_FORMATS
-        ]
-        count_after = len(files)
+        # 重新统计处理后的文件数
+        self._files_cache = []  # 清除缓存以重新扫描
+        count_after = len(self._scan_files())
 
         self.logInfo.emit(
-            f"\n耗时: {datetime.now() - start}. 修改前有 {count_before} 张图片, 修改后有 {count_after} 张图片"
+            f"\n耗时: {datetime.now() - start}. 转换前有 {count_before} 张图片, 转换后有 {count_after} 张图片"
         )
 
 
@@ -210,7 +179,7 @@ class ImgFormatTransInterface(GalleryInterface):
             )
         )
 
-        # 下载按钮
+        # 按钮 用于开始转换
         self.btn_download = PushButton(text="转换")
         self.btn_download.clicked.connect(self.start)
 
