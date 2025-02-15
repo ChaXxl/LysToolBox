@@ -86,6 +86,11 @@ class Config(QConfig):
     # 统计数据
     statistics_excel_path = ConfigItem("Statistics", "ExcelPath", "", FolderValidator())
 
+    # 统计新增加的数据
+    incrementalDatas_excel_path1 = ConfigItem("IncrementalDatas", "ExcelPath1", "", "")
+    incrementalDatas_excel_path2 = ConfigItem("IncrementalDatas", "ExcelPath2", "", "")
+    incrementalDatas_output_path = ConfigItem("IncrementalDatas", "OutputPath", "", FolderValidator())
+
     # 查找值
     searchval_excel_path = ConfigItem("SearchVal", "ExcelPath", "", FolderValidator())
 

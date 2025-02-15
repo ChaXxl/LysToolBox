@@ -16,6 +16,7 @@ from view.interface.savetodatabase import SaveToDatabaseInterface
 from view.interface.searchval import SearchValInterface
 from view.interface.setting import SettingInterface
 from view.interface.statistics import StatisticsInterface
+from view.interface.incrementaldatas import IncrementalDatasInterface
 from view.interface.updatecert import UpdateCertInterface
 from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yolo import YoloInterface
@@ -55,6 +56,9 @@ class MainWindow(FluentWindow):
 
         # 统计数据
         self.statisticsInterface = StatisticsInterface(self)
+
+        # 统计新增加的数据
+        self.incrementalDatasInterface = IncrementalDatasInterface(self)
 
         # 查找值
         self.searchValInterface = SearchValInterface(self)
@@ -110,6 +114,9 @@ class MainWindow(FluentWindow):
             self.saveToDatabaseInterface, FIF.DICTIONARY, "保存 Excel 内容到数据库"
         )
         self.addSubInterface(self.statisticsInterface, FIF.AIRPLANE, "统计数据")
+        self.addSubInterface(
+            self.incrementalDatasInterface, FIF.AIRPLANE, "统计新增加的数据"
+        )
         self.addSubInterface(self.searchValInterface, FIF.SEARCH, "查找值")
 
         self.addSubInterface(
