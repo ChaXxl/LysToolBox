@@ -19,6 +19,7 @@ from view.interface.statistics import StatisticsInterface
 from view.interface.updatecert import UpdateCertInterface
 from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yolo import YoloInterface
+from view.interface.mergedexcelFiles import MergedExcelFilesInterface
 
 
 class MainWindow(FluentWindow):
@@ -70,6 +71,9 @@ class MainWindow(FluentWindow):
         # 修正图片后缀名
         self.fixImageSuffixInterface = FixImageSuffixInterface(self)
 
+        # 合并 Excel 文件
+        self.mergedExcelFilesInterface = MergedExcelFilesInterface(self)
+
         # 设置
         self.settingInterface = SettingInterface(self)
 
@@ -113,6 +117,10 @@ class MainWindow(FluentWindow):
         )
         self.addSubInterface(
             self.fixImageSuffixInterface, FIF.SETTING, "修正图片后缀名"
+        )
+
+        self.addSubInterface(
+            self.mergedExcelFilesInterface, FIF.IMAGE_EXPORT, "合并 Excel 文件"
         )
 
         self.addSubInterface(
