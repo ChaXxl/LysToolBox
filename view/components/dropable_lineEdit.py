@@ -5,6 +5,10 @@ from qfluentwidgets import LineEdit
 
 
 class DropableLineEdit(LineEdit):
+    """
+    可拖拽的文件选择器
+    """
+
     def __init__(self):
         super().__init__()
         self.acceptDrops()
@@ -28,6 +32,10 @@ class DropableLineEdit(LineEdit):
 
 
 class DropableLineEditDir(DropableLineEdit):
+    """
+    可拖拽的文件夹选择器
+    """
+
     def __init__(self):
         super().__init__()
         self.acceptDrops()
@@ -59,6 +67,10 @@ class DropableLineEditDir(DropableLineEdit):
 
 
 class DropableLineEditOnnx(LineEdit):
+    """
+    可拖拽的 ONNX 文件选择器
+    """
+
     def __init__(self):
         super().__init__()
         self.acceptDrops()
@@ -86,6 +98,10 @@ class DropableLineEditOnnx(LineEdit):
 
 
 class DropableLineEditExcel(LineEdit):
+    """
+    可拖拽的 Excel 文件选择器
+    """
+
     def __init__(self):
         super().__init__()
         self.acceptDrops()
