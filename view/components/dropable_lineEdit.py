@@ -66,7 +66,7 @@ class DropableLineEditDir(DropableLineEdit):
             event.ignore()
 
 
-class DropableLineEditOnnx(LineEdit):
+class DropableLineEditOnnx(DropableLineEdit):
     """
     可拖拽的 ONNX 文件选择器
     """
@@ -74,13 +74,6 @@ class DropableLineEditOnnx(LineEdit):
     def __init__(self):
         super().__init__()
         self.acceptDrops()
-
-    @override
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore()
 
     @override
     def dropEvent(self, event):
@@ -97,7 +90,7 @@ class DropableLineEditOnnx(LineEdit):
             event.ignore()
 
 
-class DropableLineEditExcel(LineEdit):
+class DropableLineEditExcel(DropableLineEdit):
     """
     可拖拽的 Excel 文件选择器
     """
@@ -105,13 +98,6 @@ class DropableLineEditExcel(LineEdit):
     def __init__(self):
         super().__init__()
         self.acceptDrops()
-
-    @override
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore()
 
     @override
     def dropEvent(self, event):
@@ -126,6 +112,7 @@ class DropableLineEditExcel(LineEdit):
                 self.setText(filename)
         else:
             event.ignore()
+
 
 class DropableLineEditExcelDir(DropableLineEdit):
     """
