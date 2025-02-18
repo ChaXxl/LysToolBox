@@ -21,6 +21,7 @@ from view.interface.updatecert import UpdateCertInterface
 from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yolo import YoloInterface
 from view.interface.mergedexcelFiles import MergedExcelFilesInterface
+from view.interface.recheck import ReCheckInterface
 
 
 class MainWindow(FluentWindow):
@@ -78,6 +79,9 @@ class MainWindow(FluentWindow):
         # 合并 Excel 文件
         self.mergedExcelFilesInterface = MergedExcelFilesInterface(self)
 
+        # 复查数据
+        self.reCheckInterface = ReCheckInterface(self)
+
         # 设置
         self.settingInterface = SettingInterface(self)
 
@@ -128,6 +132,10 @@ class MainWindow(FluentWindow):
 
         self.addSubInterface(
             self.mergedExcelFilesInterface, FIF.IMAGE_EXPORT, "合并 Excel 文件"
+        )
+
+        self.addSubInterface(
+            self.reCheckInterface, FIF.IMAGE_EXPORT, "复查数据"
         )
 
         self.addSubInterface(
