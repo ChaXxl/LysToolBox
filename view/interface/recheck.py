@@ -3,8 +3,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
 
+import pandas as pd
 from DrissionPage import Chromium
-from openpyxl import Workbook, load_workbook
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
 from qfluentwidgets import (
@@ -34,15 +34,99 @@ class ReCheckWorker(QThread):
 
         self.bro = Chromium()
 
-    def jd(self):
+    def jd(self, store_url: str, medicine_name: str, store_name: str) -> bool:
+        res: bool = False
+
         tab = self.bro.latest_tab
 
-    def tb(self):
+        # 等待用户登录
+        self.logInfo.emit("请在浏览器中登录京东账号")
+        tab.get("https://www.jd.com/")
+        tab.ele("tag:a@class=nickname", timeout=70)
+
+        # 进入店铺搜索药品
+        new_tab = self.bro.new_tab(store_url)
+
+        new_tab.ele("#key01", timeout=5).input(medicine_name)
+        new_tab.ele(".button01", timeout=5).click()
+
+        # 抱歉，没有找到
+        if not new_tab.ele("text:抱歉，没有找到与", timeout=3):
+            res = True
+
+        self.bro.close_tabs(new_tab)
+
+        return res
+
+    def tb(self, store_url: str, medicine_name: str, store_name: str):
+        res: bool = False
+
         tab = self.bro.latest_tab
+
+        # 等待用户登录
+        self.logInfo.emit("请在浏览器中登录淘宝账号")
+        tab.get("https://www.taobao.com/")
+        tab.ele("tag:a@class=site-nav-login-info-nick", timeout=70)
+
+        # 进入店铺搜索药品
+        tab.listen.start("h5api.m.taobao.com/h5/mtop.taobao.shop.simple.item.fetch")
+        new_tab_id = self.bro.new_tab(store_url)
+        tab.ele("text=搜索宝贝", timeout=10).input(medicine_name)
+        tab.ele("搜本店", timeout=10).click()
+
+        for package in tab.listen.steps():
+            # 如果 data.data 里面有数据，说明找到了
+            if package.response.body["data"]["data"]:
+                res = True
+
+        self.bro.close_tabs(new_tab_id)
+
+        return res
 
     @override
     def run(self):
         start = datetime.now()
+
+        df = pd.read_excel(self.keywords_path)
+
+        # 只挑选平台为 京东 或者 淘宝 的数据
+        df = df[df["平台"].isin(["京东", "淘宝"])]
+
+        # 去重
+        df.drop_duplicates(subset=["店铺主页"], keep="first", inplace=True)
+
+        self.logInfo.emit(f"共有 {df.shape[0]} 间店铺需要复查")
+
+        process_count = 0
+
+        for i, row in df.iterrows():
+            try:
+                process_count += 1
+
+                self.setProgress.emit(process_count / df.shape[0] * 100)
+                self.setProgressInfo.emit(i + 1, df.shape[0])
+
+                res: bool = True
+
+                if "京东" == row["平台"]:
+                    res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
+                elif "淘宝" == row["平台"]:
+                    res = self.tb(row["店铺主页"], row["药品名"], row["药店名称"])
+
+                # 如果 res 为 False, 说明对应平台下架了该药品, 则把该行移除
+                if not res:
+                    df = df.drop(i)
+
+                # 保存结果
+                df.to_excel(
+                    self.output_dir / "复查结果.xlsx", index=False, engine="openpyxl"
+                )
+            except Exception as e:
+                self.logInfo.emit(f"{row["店铺主页"]} 复查失败: {e}")
+                continue
+
+        # 保存结果
+        df.to_excel(self.output_dir / "复查结果.xlsx", index=False, engine="openpyxl")
 
         self.logInfo.emit(f"\n耗时: {datetime.now() - start}")
 
