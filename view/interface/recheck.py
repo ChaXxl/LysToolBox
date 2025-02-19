@@ -76,10 +76,8 @@ class ReCheckWorker(QThread):
         new_tab.ele("#mq", timeout=10).input(medicine_name)
         new_tab.ele("#J_CurrShopBtn", timeout=10).click()
 
-        for package in new_tab.listen.steps():
-            # 如果 data.data 里面有数据，说明找到了
-            if package.response.body["data"]["data"]:
-                res = True
+        if not new_tab.ele("text:没找到符合条件的商品", timeout=3):
+            res = True
 
         self.bro.close_tabs(new_tab)
 
