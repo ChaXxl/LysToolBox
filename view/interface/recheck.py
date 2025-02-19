@@ -97,16 +97,16 @@ class ReCheckWorker(QThread):
         # 去重
         df.drop_duplicates(subset=["店铺主页"], keep="first", inplace=True)
 
+        # 重新索引，保证 iterrows() 遍历时 i 连续
+        df.reset_index(drop=True, inplace=True)
+
         self.logInfo.emit(f"共有 {df.shape[0]} 间店铺需要复查")
 
-        process_count = 0
         drop_indices = []  # 记录需要删除的索引
 
         for i, row in df.iterrows():
             try:
-                process_count += 1
-
-                self.setProgress.emit(process_count / df.shape[0] * 100)
+                self.setProgress.emit((i + 1) / df.shape[0] * 100)
                 self.setProgressInfo.emit(i + 1, df.shape[0])
 
                 res: bool = True
