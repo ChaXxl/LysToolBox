@@ -71,17 +71,17 @@ class ReCheckWorker(QThread):
             self.logInfo.emit("请在浏览器中登录淘宝账号")
 
         # 进入店铺搜索药品
-        tab.listen.start("h5api.m.taobao.com/h5/mtop.taobao.shop.simple.item.fetch")
-        new_tab_id = self.bro.new_tab(store_url)
-        tab.ele("text=搜索宝贝", timeout=10).input(medicine_name)
-        tab.ele("搜本店", timeout=10).click()
+        new_tab = self.bro.new_tab(store_url)
+        new_tab.listen.start("h5api.m.taobao.com/h5/mtop.taobao.shop.simple.item.fetch")
+        new_tab.ele("#mq", timeout=10).input(medicine_name)
+        new_tab.ele("#J_CurrShopBtn", timeout=10).click()
 
-        for package in tab.listen.steps():
+        for package in new_tab.listen.steps():
             # 如果 data.data 里面有数据，说明找到了
             if package.response.body["data"]["data"]:
                 res = True
 
-        self.bro.close_tabs(new_tab_id)
+        self.bro.close_tabs(new_tab)
 
         return res
 
@@ -92,7 +92,7 @@ class ReCheckWorker(QThread):
         df = pd.read_excel(self.keywords_path)
 
         # 只挑选平台为 京东 或者 淘宝 的数据
-        df = df[df["平台"].isin(["京东", "淘宝"])]
+        df = df[df["平台"].isin(["京东", "淘宝天猫"])]
 
         # 去重
         df.drop_duplicates(subset=["店铺主页"], keep="first", inplace=True)
@@ -110,10 +110,12 @@ class ReCheckWorker(QThread):
                 self.setProgressInfo.emit(i + 1, df.shape[0])
 
                 res: bool = True
+                platform = row["平台"]
 
-                if "京东" == row["平台"]:
-                    res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
-                elif "淘宝天猫" == row["平台"]:
+                if "京东" == platform:
+                    # res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
+                    ...
+                elif "淘宝天猫" == platform:
                     res = self.tb(row["店铺主页"], row["药品名"], row["药店名称"])
 
                 # 如果 res 为 False, 说明对应平台下架了该药品, 则把该行移除
