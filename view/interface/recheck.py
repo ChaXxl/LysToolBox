@@ -100,6 +100,7 @@ class ReCheckWorker(QThread):
         self.logInfo.emit(f"共有 {df.shape[0]} 间店铺需要复查")
 
         process_count = 0
+        drop_indices = []  # 记录需要删除的索引
 
         for i, row in df.iterrows():
             try:
@@ -112,20 +113,18 @@ class ReCheckWorker(QThread):
 
                 if "京东" == row["平台"]:
                     res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
-                elif "淘宝" == row["平台"]:
+                elif "淘宝天猫" == row["平台"]:
                     res = self.tb(row["店铺主页"], row["药品名"], row["药店名称"])
 
                 # 如果 res 为 False, 说明对应平台下架了该药品, 则把该行移除
                 if not res:
-                    df = df.drop(i)
-
-                # 保存结果
-                df.to_excel(
-                    self.output_dir / "复查结果.xlsx", index=False, engine="openpyxl"
-                )
+                    drop_indices.append(i)
             except Exception as e:
                 self.logInfo.emit(f"{row["店铺主页"]} 复查失败: {e}")
                 continue
+
+        # 批量删除记录的索引
+        df.drop(index=drop_indices, inplace=True)
 
         # 保存结果
         df.to_excel(self.output_dir / "复查结果.xlsx", index=False, engine="openpyxl")
