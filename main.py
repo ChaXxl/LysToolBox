@@ -102,40 +102,66 @@ class MainWindow(FluentWindow):
         QApplication.processEvents()
 
     def initNavigation(self):
-
-        self.addSubInterface(self.jdtb_interface, FIF.PEOPLE, "京东淘宝自动化")
-        self.addSubInterface(self.imgd_interface, FIF.SEARCH, "图片下载")
-        self.addSubInterface(
-            self.imgFormatTrans_interface, FIF.EDUCATION, "图片格式转换"
-        )
-        self.addSubInterface(self.yolo_interface, FIF.CAMERA, "通过 yolo 识别药品")
-        self.addSubInterface(self.deleteRowInterface, FIF.DELETE, "删除行")
-        self.addSubInterface(
-            self.writeExcelInterface, FIF.IMAGE_EXPORT, "从数据库查询资质写入 Excel"
-        )
-        self.addSubInterface(self.formatExcelInterface, FIF.CAR, "格式化")
-        self.addSubInterface(
-            self.saveToDatabaseInterface, FIF.DICTIONARY, "保存 Excel 内容到数据库"
-        )
-        self.addSubInterface(self.statisticsInterface, FIF.AIRPLANE, "统计数据")
-        self.addSubInterface(
-            self.incrementalDatasInterface, FIF.AIRPLANE, "统计新增加的数据"
-        )
-        self.addSubInterface(self.searchValInterface, FIF.SEARCH, "查找值")
+        pos = NavigationItemPosition.SCROLL
 
         self.addSubInterface(
-            self.updateCertInterface, FIF.IMAGE_EXPORT, "更新数据库的资质名称"
+            self.jdtb_interface, FIF.PEOPLE, "京东淘宝自动化", position=pos
+        )
+        self.addSubInterface(self.imgd_interface, FIF.SEARCH, "图片下载", position=pos)
+        self.addSubInterface(
+            self.imgFormatTrans_interface, FIF.EDUCATION, "图片格式转换", position=pos
         )
         self.addSubInterface(
-            self.fixImageSuffixInterface, FIF.SETTING, "修正图片后缀名"
+            self.yolo_interface, FIF.CAMERA, "通过 yolo 识别药品", position=pos
+        )
+        self.addSubInterface(
+            self.deleteRowInterface, FIF.DELETE, "删除行", position=pos
+        )
+        self.addSubInterface(
+            self.writeExcelInterface,
+            FIF.IMAGE_EXPORT,
+            "从数据库查询资质写入 Excel",
+            position=pos,
+        )
+        self.addSubInterface(self.formatExcelInterface, FIF.CAR, "格式化", position=pos)
+        self.addSubInterface(
+            self.saveToDatabaseInterface,
+            FIF.DICTIONARY,
+            "保存 Excel 内容到数据库",
+            position=pos,
+        )
+        self.addSubInterface(
+            self.statisticsInterface, FIF.AIRPLANE, "统计数据", position=pos
+        )
+        self.addSubInterface(
+            self.incrementalDatasInterface,
+            FIF.AIRPLANE,
+            "统计新增加的数据",
+            position=pos,
+        )
+        self.addSubInterface(
+            self.searchValInterface, FIF.SEARCH, "查找值", position=pos
         )
 
         self.addSubInterface(
-            self.mergedExcelFilesInterface, FIF.IMAGE_EXPORT, "合并 Excel 文件"
+            self.updateCertInterface,
+            FIF.IMAGE_EXPORT,
+            "更新数据库的资质名称",
+            position=pos,
+        )
+        self.addSubInterface(
+            self.fixImageSuffixInterface, FIF.SETTING, "修正图片后缀名", position=pos
         )
 
         self.addSubInterface(
-            self.reCheckInterface, FIF.IMAGE_EXPORT, "复查数据"
+            self.mergedExcelFilesInterface,
+            FIF.IMAGE_EXPORT,
+            "合并 Excel 文件",
+            position=pos,
+        )
+
+        self.addSubInterface(
+            self.reCheckInterface, FIF.IMAGE_EXPORT, "复查数据", position=pos
         )
 
         self.addSubInterface(
