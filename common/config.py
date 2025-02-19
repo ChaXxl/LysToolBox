@@ -108,7 +108,7 @@ class Config(QConfig):
     mergedExcelFiles_output_path = ConfigItem("MergedExcelFiles", "OutputPath", "", FolderValidator())
 
     # 复查数据
-    recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "", FolderValidator())
+    recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "")
     recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", FolderValidator())
 
 YEAR = 2024
