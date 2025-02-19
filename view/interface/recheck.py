@@ -121,6 +121,15 @@ class ReCheckWorker(QThread):
                     drop_indices.append(i)
             except Exception as e:
                 self.logInfo.emit(f"{row["店铺主页"]} 复查失败: {e}")
+
+                # 批量删除记录的索引
+                df.drop(index=drop_indices, inplace=True)
+
+                # 保存结果
+                df.to_excel(
+                    self.output_dir / "复查结果.xlsx", index=False, engine="openpyxl"
+                )
+
                 continue
 
         # 批量删除记录的索引
