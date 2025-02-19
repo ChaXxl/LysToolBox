@@ -111,8 +111,7 @@ class ReCheckWorker(QThread):
                 platform = row["平台"]
 
                 if "京东" == platform:
-                    # res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
-                    ...
+                    res = self.jd(row["店铺主页"], row["药品名"], row["药店名称"])
                 elif "淘宝天猫" == platform:
                     res = self.tb(row["店铺主页"], row["药品名"], row["药店名称"])
 
