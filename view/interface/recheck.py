@@ -40,9 +40,10 @@ class ReCheckWorker(QThread):
         tab = self.bro.latest_tab
 
         # 等待用户登录
-        self.logInfo.emit("请在浏览器中登录京东账号")
         tab.get("https://www.jd.com/")
-        tab.ele("tag:a@class=nickname", timeout=70)
+        ele_nickname = tab.ele("tag:a@class=nickname", timeout=70)
+        if not ele_nickname:
+            self.logInfo.emit("请在浏览器中登录京东账号")
 
         # 进入店铺搜索药品
         new_tab = self.bro.new_tab(store_url)
@@ -64,9 +65,10 @@ class ReCheckWorker(QThread):
         tab = self.bro.latest_tab
 
         # 等待用户登录
-        self.logInfo.emit("请在浏览器中登录淘宝账号")
         tab.get("https://www.taobao.com/")
-        tab.ele("tag:a@class=site-nav-login-info-nick", timeout=70)
+        ele_login_flag = tab.ele("tag:a@class=site-nav-login-info-nick", timeout=70)
+        if not ele_login_flag:
+            self.logInfo.emit("请在浏览器中登录淘宝账号")
 
         # 进入店铺搜索药品
         tab.listen.start("h5api.m.taobao.com/h5/mtop.taobao.shop.simple.item.fetch")
