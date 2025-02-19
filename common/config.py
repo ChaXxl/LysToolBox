@@ -89,7 +89,9 @@ class Config(QConfig):
     # 统计新增加的数据
     incrementalDatas_excel_path1 = ConfigItem("IncrementalDatas", "ExcelPath1", "", "")
     incrementalDatas_excel_path2 = ConfigItem("IncrementalDatas", "ExcelPath2", "", "")
-    incrementalDatas_output_path = ConfigItem("IncrementalDatas", "OutputPath", "", FolderValidator())
+    incrementalDatas_output_path = ConfigItem(
+        "IncrementalDatas", "OutputPath", "", FolderValidator()
+    )
 
     # 查找值
     searchval_excel_path = ConfigItem("SearchVal", "ExcelPath", "", FolderValidator())
@@ -104,12 +106,17 @@ class Config(QConfig):
     fiximgsuffix_excel_path = ConfigItem("FixImgSuffix", "ExcelPath", "", "")
 
     # 合并 Excel 文件
-    mergedExcelFiles_excel_path = ConfigItem("MergedExcelFiles", "ExcelPath", "", FolderValidator())
-    mergedExcelFiles_output_path = ConfigItem("MergedExcelFiles", "OutputPath", "", FolderValidator())
+    mergedExcelFiles_excel_path = ConfigItem(
+        "MergedExcelFiles", "ExcelPath", "", FolderValidator()
+    )
+    mergedExcelFiles_output_path = ConfigItem(
+        "MergedExcelFiles", "OutputPath", "", FolderValidator()
+    )
 
     # 复查数据
     recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "")
     recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", FolderValidator())
+
 
 YEAR = 2024
 AUTHOR = "ChaChaL"
