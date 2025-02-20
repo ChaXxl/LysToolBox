@@ -2,6 +2,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
+from time import sleep
 
 import pandas as pd
 from DrissionPage import Chromium
@@ -48,13 +49,18 @@ class ReCheckWorker(QThread):
         # 进入店铺搜索药品
         new_tab = self.bro.new_tab(store_url)
 
+        sleep(0.5)
         new_tab.ele("#key01", timeout=5).input(medicine_name)
+
+        sleep(0.5)
         new_tab.ele(".button01", timeout=5).click()
 
+        sleep(0.5)
         # 抱歉，没有找到
         if not new_tab.ele("text:抱歉，没有找到与", timeout=3):
             res = True
 
+        sleep(0.5)
         self.bro.close_tabs(new_tab)
 
         return res
@@ -72,13 +78,22 @@ class ReCheckWorker(QThread):
 
         # 进入店铺搜索药品
         new_tab = self.bro.new_tab(store_url)
-        new_tab.listen.start("h5api.m.taobao.com/h5/mtop.taobao.shop.simple.item.fetch")
+
+        while "404 Not Found" in new_tab.html:
+            new_tab.refresh()
+            sleep(1)
+
+        sleep(0.5)
         new_tab.ele("#mq", timeout=10).input(medicine_name)
+
+        sleep(0.5)
         new_tab.ele("#J_CurrShopBtn", timeout=10).click()
 
-        if not new_tab.ele("text:没找到符合条件的商品", timeout=3):
+        sleep(0.5)
+        if not new_tab.ele(".item ", timeout=3):
             res = True
 
+        sleep(0.5)
         self.bro.close_tabs(new_tab)
 
         return res
@@ -120,6 +135,8 @@ class ReCheckWorker(QThread):
                     drop_indices.append(i)
             except Exception as e:
                 self.logInfo.emit(f"{row["店铺主页"]} 复查失败: {e}")
+
+                drop_indices.append(i)
 
                 # 批量删除记录的索引
                 df.drop(index=drop_indices, inplace=True)
