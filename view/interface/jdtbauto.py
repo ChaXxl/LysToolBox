@@ -55,6 +55,10 @@ class JdTbWorker(QThread):
             self.setProgress.emit((idx + 1) // len(keywords) * 100)
             self.setProgressInfo.emit(idx + 1, len(keywords))
 
+            if Path(self.output_dir, f"{keyword}.xlsx").exists():
+                self.logInfo.emit(f"{keyword} 已经存在，跳过")
+                continue
+
             self.jd.search(keyword)
 
             self.tb.search(keyword)
