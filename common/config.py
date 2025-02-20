@@ -117,6 +117,12 @@ class Config(QConfig):
     recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "")
     recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", FolderValidator())
 
+    # 导出资质空白的行
+    exportEmptyRow_excel_path = ConfigItem("ExportEmptyRow", "ExcelPath", "", "")
+    exportEmptyRow_output_path = ConfigItem(
+        "ExportEmptyRow", "OutputPath", "", FolderValidator()
+    )
+
 
 YEAR = 2024
 AUTHOR = "ChaChaL"

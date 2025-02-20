@@ -22,6 +22,7 @@ from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yolo import YoloInterface
 from view.interface.mergedexcelFiles import MergedExcelFilesInterface
 from view.interface.recheck import ReCheckInterface
+from view.interface.exportemptyrow import ExportEmptyRowInterface
 
 
 class MainWindow(FluentWindow):
@@ -81,6 +82,9 @@ class MainWindow(FluentWindow):
 
         # 复查数据
         self.reCheckInterface = ReCheckInterface(self)
+
+        # 导出资质名称为空的行数
+        self.exportEmptyRowInterface = ExportEmptyRowInterface(self)
 
         # 设置
         self.settingInterface = SettingInterface(self)
@@ -162,6 +166,13 @@ class MainWindow(FluentWindow):
 
         self.addSubInterface(
             self.reCheckInterface, FIF.IMAGE_EXPORT, "复查数据", position=pos
+        )
+
+        self.addSubInterface(
+            self.exportEmptyRowInterface,
+            FIF.IMAGE_EXPORT,
+            "导出资质名称为空的行数",
+            position=pos,
         )
 
         self.addSubInterface(
