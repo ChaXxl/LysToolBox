@@ -202,8 +202,9 @@ class TB:
 
         # 检查是否还有下一页
         while ele_next_page and "disabled" not in ele_next_page.attrs:
-            try:
+            ele_next_page = tab.ele("@@tag()=button@@text():下一页", timeout=0.5)
 
+            try:
                 # 如果有下一页, 就点击下一页
                 if ele_next_page:
                     ele_next_page.click()
