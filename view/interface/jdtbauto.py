@@ -49,9 +49,9 @@ class JdTbWorker(QThread):
         wb = load_workbook(self.keywords_path, read_only=True, data_only=True)
         ws = wb.active
 
-        keywords: set[str] = {
+        keywords: [str] = [
             row[1] for row in ws.iter_rows(min_row=2, values_only=True)
-        }
+        ]
 
         for idx, keyword in enumerate(keywords):
             self.setProgress.emit((idx + 1) // len(keywords) * 100)
