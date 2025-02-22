@@ -2,6 +2,7 @@
 *.pt
 .DS_Store
 .idea
+build
 dist
 temp
 __pycache__
