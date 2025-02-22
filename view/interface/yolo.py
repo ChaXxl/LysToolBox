@@ -44,6 +44,7 @@ class YoloWorker(QThread):
         self.img_dir = img_dir
         self.model_path = model_path
         self.output_dir = output_dir
+        self.output_dir.mkdir(exist_ok=True)
 
         self.conf_thresh = conf_thresh
         self.iou_thresh = iou_thresh
