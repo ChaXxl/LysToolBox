@@ -59,7 +59,7 @@ class YoloWorker(QThread):
         self.session = ort.InferenceSession(
             model_path,
             providers=(
-                ["CUDAExecutionProvider", "CPUExecutionProvider"]
+                ["CUDAExecutionProvider"]
                 if ort.get_device() == "GPU"
                 else ["CPUExecutionProvider"]
             ),
