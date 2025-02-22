@@ -122,7 +122,11 @@ class YoloWorker(QThread):
 
     def preprocess(self, image_path: Path) -> tuple[cv2.Mat, np.array, tuple[int, int]]:
         """预处理输入图像，返回调整后的图像和比例信息"""
-        img = cv2.imread(str(image_path))
+        with open(image_path, "rb") as f:
+            img_array = np.asarray(bytearray(f.read()), dtype=np.uint8)
+
+        img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
         h, w = img.shape[:2]
 
         # 将图像颜色空间从 BGR 转换为 RGB
