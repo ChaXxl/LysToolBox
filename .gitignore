@@ -2,7 +2,7 @@
 *.pt
 .DS_Store
 .idea
-
+dist
 temp
 __pycache__
 data/config.json
