@@ -43,6 +43,14 @@ def isWin11():
 class Config(QConfig):
     """Config of application"""
 
+    # 通过 MitmProxy 代理搜索
+    mitmProxySearch_host = ConfigItem("MitmProxySearch", "Host", "", "")
+    mitmProxySearch_excel_path = ConfigItem("MitmProxySearch", "ExcelPath", "", "")
+    mitmProxySearch_output_path = ConfigItem(
+        "MitmProxySearch", "OutputPath", "", FolderValidator()
+    )
+    mitmProxySearch_keyword = ConfigItem("MitmProxySearch", "Keyword", "", "")
+
     # 自启动
     autoStart = ConfigItem("General", "AutoStart", False, BoolValidator())
 
