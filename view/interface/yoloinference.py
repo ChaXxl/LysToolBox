@@ -23,7 +23,7 @@ from view.components.dropable_lineEdit import DropableLineEditDir, DropableLineE
 from view.interface.gallery_interface import GalleryInterface
 
 
-class YoloWorker(QThread):
+class YoloInferenceWorker(QThread):
     logInfo = Signal(str)
     setProgress = Signal(int)
     setProgressInfo = Signal(int, int)
@@ -337,7 +337,7 @@ class YoloInterface(GalleryInterface):
         self.lineEdit_onnx_path.setText(cfg.yolo_onnx_path.value)
         self.lineEdit_output_path.setText(cfg.yolo_output_path.value)
 
-        self.worker: Optional[YoloWorker] = None
+        self.worker: Optional[YoloInferenceWorker] = None
 
     def __initWidget(self):
         self.view.setObjectName("")
@@ -447,7 +447,7 @@ class YoloInterface(GalleryInterface):
 
         self.btn_download.setEnabled(False)
 
-        self.worker = YoloWorker(img_dir, onnx_path, output_dir)
+        self.worker = YoloInferenceWorker(img_dir, onnx_path, output_dir)
 
         self.worker.logInfo.connect(self.logInfo)
         self.worker.finished.connect(self.finished)

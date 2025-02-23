@@ -19,7 +19,7 @@ from view.interface.statistics import StatisticsInterface
 from view.interface.incrementaldatas import IncrementalDatasInterface
 from view.interface.updatecert import UpdateCertInterface
 from view.interface.writeexcel import WriteExcelInterface
-from view.interface.yolo import YoloInterface
+from view.interface.yoloinference import YoloInterface
 from view.interface.mergedexcelFiles import MergedExcelFilesInterface
 from view.interface.recheck import ReCheckInterface
 from view.interface.exportemptyrow import ExportEmptyRowInterface
@@ -42,7 +42,7 @@ class MainWindow(FluentWindow):
         self.imgFormatTrans_interface = ImgFormatTransInterface(self)
 
         # 通过 yolo 识别药品
-        self.yolo_interface = YoloInterface(self)
+        self.yoloinference_interface = YoloInterface(self)
 
         # 删除行
         self.deleteRowInterface = DeleteRowInterface(self)
@@ -116,7 +116,7 @@ class MainWindow(FluentWindow):
             self.imgFormatTrans_interface, FIF.EDUCATION, "图片格式转换", position=pos
         )
         self.addSubInterface(
-            self.yolo_interface, FIF.CAMERA, "通过 yolo 识别药品", position=pos
+            self.yoloinference_interface, FIF.CAMERA, "通过 yolo 识别药品", position=pos
         )
         self.addSubInterface(
             self.deleteRowInterface, FIF.DELETE, "删除行", position=pos
