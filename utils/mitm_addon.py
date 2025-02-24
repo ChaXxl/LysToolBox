@@ -32,8 +32,6 @@ class Addon(QThread):
         self.sheet = None
         self.workBook = None
 
-        self.cur_file_path = Path(__file__).parent  # 当前文件路
-        self.jd_html_path = self.cur_file_path / ".jd"
         self.filename: Optional[Path] = None
 
         self.thread = ThreadPoolExecutor(max_workers=5)  # 线程池
