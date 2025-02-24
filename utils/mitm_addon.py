@@ -283,7 +283,6 @@ class Addon(QThread):
 
         msg = "\n准备保存京东后 30 条数据\n"
         self.add_text.emit(msg)
-        # logger.info(msg)
 
         # self.thread.submit(self.save_to_excel, datas, '京东')
         self.save_to_excel(datas, "京东")
@@ -366,12 +365,11 @@ class Addon(QThread):
 
                 msg = f"\n第 {row[0].row} 行 {storeName} {companyName} {url}"
                 self.add_text.emit(msg)
-                # logger.info(msg)
 
         if flag:
             msg = f"\n 在 Excel 中没找到该店铺: {storeName}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
+
             return
 
         self.workBook.save(self.filename)
@@ -574,7 +572,6 @@ class Addon(QThread):
 
         msg = f"{mall_name} {business_licence_url}"
         self.add_text.emit(msg)
-        # logger.info(msg)
 
     # 拼多多获取店铺名称
     def pdd_getStoreName(self, url, headers):
@@ -656,7 +653,6 @@ class Addon(QThread):
             if "乐药师" in productName:
                 msg = f"{storeName} {productName} {price} 拼多多 {t}"
                 self.add_text.emit(msg)
-                # logger.info(msg)
 
         if datas is None:
             return
@@ -673,7 +669,6 @@ class Addon(QThread):
         # logger.info(url)
         msg = url
         self.add_text.emit(msg)
-        # logger.info(msg)
 
         # 拼多多营业执照
 
@@ -685,7 +680,6 @@ class Addon(QThread):
 
         msg = f"{mall_name} {business_licence_url}"
         self.add_text.emit(msg)
-        # logger.info(msg)
 
         # pyperclip.copy(mall_name)
         # time.sleep(1)
@@ -894,7 +888,6 @@ class Addon(QThread):
 
                 msg = f"{storeName} {productName} {price} 饿了么 {t}"
                 self.add_text.emit(msg)
-                # logger.info(msg)
 
         if datas is None:
             return
@@ -915,7 +908,6 @@ class Addon(QThread):
 
         msg = img_url
         self.add_text.emit(msg)
-        # logger.info(msg)
 
     def request(self, flow: http.HTTPFlow) -> None:
         url = flow.request.url
@@ -947,7 +939,6 @@ class Addon(QThread):
 
             msg = f"京东后 30 条数据 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.parsejd2HTML(res)
 
@@ -957,7 +948,6 @@ class Addon(QThread):
 
             msg = f" 京东营业执照 {url[:50]}"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             # self.thread.submit(self.jd_certificate, res, url)
             self.jd_certificate(res, url)
@@ -967,7 +957,6 @@ class Addon(QThread):
             res = flow.response.text
             msg = f"药房网 {url[:50]}"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.yfw(res)
 
@@ -990,7 +979,6 @@ class Addon(QThread):
             # logger.info(f'\n拼多多 {url[:50]}\n')
             msg = f"\n拼多多 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.pdd(res)
 
@@ -1003,7 +991,6 @@ class Addon(QThread):
 
             msg = f"\n拼多多 xhr {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.pdd_xhr(res)
 
@@ -1013,7 +1000,6 @@ class Addon(QThread):
 
             msg = f"\n拼多多营业执照 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             # self.thread.submit(self.pdd_certificate, res)
             self.pdd_certificate(res)
@@ -1022,7 +1008,6 @@ class Addon(QThread):
         elif re.match(r".*water-mark-permanent.*\.jpg", url):
             msg = f"\n 拼多多手机端营业执照 {url[:50]}\n\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             pyperclip.copy(url)
 
@@ -1037,7 +1022,6 @@ class Addon(QThread):
             res = flow.response.json()
             msg = f"\n拼多多手机端搜索结果 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.pdd_mobild_search(res, headers)
 
@@ -1046,7 +1030,6 @@ class Addon(QThread):
             res = flow.response.json()
             msg = f"\n美团 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.meituan(res)
 
@@ -1056,7 +1039,6 @@ class Addon(QThread):
 
             msg = f"\n美团营业执照 {url[:50]}\n"
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             # self.thread.submit(self.meituan_certificate, res)
             self.meituan_certificate(res)
@@ -1070,7 +1052,6 @@ class Addon(QThread):
 
             msg = f'\n淘宝天猫 {url.split("?")[0]}\n'
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             # self.thread.submit(self.taobao, res)
             self.taobao(res)
@@ -1098,7 +1079,6 @@ class Addon(QThread):
 
             msg = f'\n饿了么 {url.split("?")[0]}\n'
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             self.ele(res)
         # 饿了么营业执照
@@ -1113,7 +1093,6 @@ class Addon(QThread):
 
             msg = f'\n饿了么营业执照 {url.split("?")[0]}\n'
             self.add_text.emit(msg)
-            # logger.info(msg)
 
             # self.thread.submit(self.ele_certificate, res)
             self.ele_certificate(res)
