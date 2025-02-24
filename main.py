@@ -1,5 +1,6 @@
 import sys
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import FluentIcon as FIF
@@ -100,7 +101,7 @@ class MainWindow(FluentWindow):
         desktop = QApplication.screens()[0].availableGeometry()
         w, h = desktop.width(), desktop.height()
 
-        self.resize(w * 0.6, h * 0.7)
+        self.resize(w * 0.52, h * 0.6)
         self.setMinimumWidth(150)
         self.setWindowIcon(QIcon(":/images/logo.png"))
         self.setWindowTitle("乐药师药品排查工具箱")
