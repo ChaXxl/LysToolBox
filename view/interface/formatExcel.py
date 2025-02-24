@@ -230,7 +230,7 @@ class FormatExcelInterface(GalleryInterface):
 
     def createSuccessInfoBar(self, title, content):
         """
-        创建错误信息栏
+        创建成功信息栏
         :param title:
         :param content:
         :return:

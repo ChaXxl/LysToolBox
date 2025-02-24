@@ -16,10 +16,12 @@ from view.components.dropable_lineEdit import DropableLineEditDir
 from view.interface.gallery_interface import GalleryInterface
 from common.config import cfg
 
+
 class MergedExcelFilesWorker(QThread):
     """
     合并 Excel 文件的工作线程
     """
+
     logInfo = Signal(str)
 
     def __init__(self, excel_path: Path, output_path: Path):
@@ -79,7 +81,9 @@ class MergedExcelFilesInterface(GalleryInterface):
         self.lineEdit_excel_path = DropableLineEditDir()
         self.lineEdit_excel_path.setPlaceholderText("请选择或者拖入Excel文件所在文件夹")
         self.lineEdit_excel_path.textChanged.connect(
-            lambda: cfg.set(cfg.mergedExcelFiles_excel_path, self.lineEdit_excel_path.text())
+            lambda: cfg.set(
+                cfg.mergedExcelFiles_excel_path, self.lineEdit_excel_path.text()
+            )
         )
 
         self.btn_select_path = PushButton(text="···")
@@ -94,7 +98,9 @@ class MergedExcelFilesInterface(GalleryInterface):
         self.lineEdit_output_path = DropableLineEditDir()
         self.lineEdit_output_path.setPlaceholderText("请选择或者拖入输出文件夹")
         self.lineEdit_output_path.textChanged.connect(
-            lambda: cfg.set(cfg.mergedExcelFiles_output_path, self.lineEdit_output_path.text())
+            lambda: cfg.set(
+                cfg.mergedExcelFiles_output_path, self.lineEdit_output_path.text()
+            )
         )
 
         self.btn_select_output_path = PushButton(text="···")
@@ -155,7 +161,7 @@ class MergedExcelFilesInterface(GalleryInterface):
 
     def createSuccessInfoBar(self, title, content):
         """
-        创建错误信息栏
+        创建成功信息栏
         """
         InfoBar.success(
             title=title,
