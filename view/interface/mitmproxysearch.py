@@ -60,23 +60,25 @@ class MitmProxySearchWorker(QThread):
     def run(self):
         start = datetime.now()
 
-        if not self.excel_path.exists():
-            return
+        # if self.excel_path:
+        # wb = load_workbook(self.excel_path, read_only=True, data_only=True)
+        # ws = wb.active
+        #
+        # keywords: [str] = [
+        #     row[1] for row in ws.iter_rows(min_row=2, values_only=True)
+        # ]
 
-        wb = load_workbook(self.excel_path, read_only=True, data_only=True)
-        ws = wb.active
-
-        keywords: [str] = [row[1] for row in ws.iter_rows(min_row=2, values_only=True)]
+        # for idx, keyword in enumerate(keywords):
+        #     self.setProgress.emit((idx + 1) // len(keywords) * 100)
+        #     self.setProgressInfo.emit(idx + 1, len(keywords))
+        #
+        #     if Path(self.output_dir, f"{keyword}.xlsx").exists():
+        #         self.logInfo.emit(f"{keyword} 已经存在，跳过")
+        #         continue
+        #
+        # elif self.keyword:
 
         asyncio.run(self.start_mitm())
-
-        for idx, keyword in enumerate(keywords):
-            self.setProgress.emit((idx + 1) // len(keywords) * 100)
-            self.setProgressInfo.emit(idx + 1, len(keywords))
-
-            if Path(self.output_dir, f"{keyword}.xlsx").exists():
-                self.logInfo.emit(f"{keyword} 已经存在，跳过")
-                continue
 
         self.logInfo.emit(f"\n耗时: {datetime.now() - start}")
 
