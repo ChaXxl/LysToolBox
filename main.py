@@ -101,7 +101,7 @@ class MainWindow(FluentWindow):
         w, h = desktop.width(), desktop.height()
 
         self.resize(w * 0.6, h * 0.7)
-        self.setMinimumWidth(760)
+        self.setMinimumWidth(150)
         self.setWindowIcon(QIcon(":/images/logo.png"))
         self.setWindowTitle("乐药师药品排查工具箱")
 
