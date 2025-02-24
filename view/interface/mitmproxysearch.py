@@ -449,6 +449,8 @@ class MitmProxySearchInterface(GalleryInterface):
                     None, keyword, Path(output_dir), proxy_ip, int(proxy_port)
                 )
 
+            self.btn_start_flag = True
+
             filename = Path(output_dir) / f"{keyword}.xlsx"
 
             self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
