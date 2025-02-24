@@ -451,7 +451,7 @@ class MitmProxySearchInterface(GalleryInterface):
 
             filename = Path(output_dir) / f"{keyword}.xlsx"
 
-            self.textEdit_log.append(f"\n\nExcel 保存在：{self.filename}\n\n")
+            self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
 
             self.worker.logInfo.connect(self.logInfo)
             self.worker.finished.connect(self.finished)
