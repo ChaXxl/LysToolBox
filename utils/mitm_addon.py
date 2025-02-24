@@ -201,8 +201,8 @@ class Addon(QThread):
         else:
             # 至少要包含其中一个品牌名
             for brand in self.brand_name:
-                if brand not in name:
-                    return False
+                if brand in name:
+                    return True
 
         return True
 
