@@ -3,6 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
+from threading import Lock
 
 import pillow_avif
 import filetype
@@ -42,6 +43,9 @@ class TransferWorker(QThread):
         # 添加文件缓存
         self._files_cache = []
 
+        # 初始化锁
+        self.lock = Lock()
+
     def _scan_files(self):
         """扫描所有支持的图片文件并缓存结果"""
         if not self._files_cache:
@@ -72,11 +76,12 @@ class TransferWorker(QThread):
     def process_file(self, file_path: Path) -> None:
         """统一处理单个文件的逻辑"""
         try:
-            # 更新进度
-            self.cur += 1
-            val = int(self.cur / self.total * 100)
-            self.setProgress.emit(val)
-            self.setProgressInfo.emit(self.cur, self.total)
+            #  获取锁来修改共享资源
+            with self.lock:
+                self.cur += 1
+                val = int(self.cur / self.total * 100)
+                self.setProgress.emit(val)
+                self.setProgressInfo.emit(self.cur, self.total)
 
             # 检测文件格式
             mime_type = filetype.guess_mime(str(file_path))
