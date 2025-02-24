@@ -54,6 +54,9 @@ class Config(QConfig):
     # 自启动
     autoStart = ConfigItem("General", "AutoStart", False, BoolValidator())
 
+    # 置顶
+    staysOnTop = ConfigItem("General", "StaysOnTop", False, BoolValidator())
+
     # 京东淘宝自动化
     jdtb_keyword_path = ConfigItem("JdTB", "KeywordPath", "", "")
     jdtb_output_path = ConfigItem("JdTB", "OutputPath", "", FolderValidator())

@@ -28,6 +28,9 @@ if platform.system() == "Windows":
 class SettingInterface(ScrollArea):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self.parent = parent
+
         self.scrollWidget = QWidget()
         self.expandLayout = ExpandLayout(self.scrollWidget)
 
@@ -44,6 +47,20 @@ class SettingInterface(ScrollArea):
             self.startAtStartGroup,
         )
         self.runAtStartCard.checkedChanged.connect(self.toggle_auto_start)
+
+        # 是否让窗口保持置顶
+        self.isStaysOnTopGroup = SettingCardGroup("窗口置顶", self.scrollWidget)
+        self.isStaysOnTopCard = SwitchSettingCard(
+            FIF.PIN,
+            "是否置顶",
+            "保持在最前面",
+            cfg.staysOnTop,
+            self.isStaysOnTopGroup,
+        )
+        self.isStaysOnTopCard.checkedChanged.connect(self.toggle_stays_on_top)
+
+        if cfg.staysOnTop.value:
+            self.parent.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
         self.personalGroup = SettingCardGroup("个性化", parent=self.scrollWidget)
 
@@ -90,6 +107,7 @@ class SettingInterface(ScrollArea):
         self.settingLabel.move(36, 30)
 
         self.startAtStartGroup.addSettingCard(self.runAtStartCard)
+        self.isStaysOnTopGroup.addSettingCard(self.isStaysOnTopCard)
         self.personalGroup.addSettingCard(self.themeCard)
         self.aboutGroup.addSettingCard(self.aboutCard)
 
@@ -97,6 +115,7 @@ class SettingInterface(ScrollArea):
         self.expandLayout.setSpacing(28)
         self.expandLayout.setContentsMargins(36, 10, 36, 0)
         self.expandLayout.addWidget(self.startAtStartGroup)
+        self.expandLayout.addWidget(self.isStaysOnTopGroup)
         self.expandLayout.addWidget(self.personalGroup)
         self.expandLayout.addWidget(self.aboutGroup)
 
@@ -146,3 +165,14 @@ class SettingInterface(ScrollArea):
             )
             winreg.DeleteValue(key, "WeChatRobot")
             winreg.CloseKey(key)
+
+    def toggle_stays_on_top(self):
+        """
+        切换窗口置顶
+        """
+        self.parent.setWindowFlag(
+            Qt.WindowType.WindowStaysOnTopHint, self.isStaysOnTopCard.isChecked()
+        )
+
+        # 重新显示窗口，确保设置生效
+        self.parent.show()
