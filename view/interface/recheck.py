@@ -318,7 +318,7 @@ class ReCheckInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "复查完成 ✅")
+        self.createSuccessInfoBar("完成", "复查完成")
 
     def start(self):
         self.textEdit_log.clear()

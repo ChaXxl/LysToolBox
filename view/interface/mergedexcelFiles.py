@@ -188,7 +188,7 @@ class MergedExcelFilesInterface(GalleryInterface):
         self.btn_select_path.setEnabled(True)
         self.btn_merged.setEnabled(True)
 
-        self.createSuccessInfoBar("完成", "合并完成 ✅")
+        self.createSuccessInfoBar("完成", "合并完成")
 
     def merge(self):
         self.textEdit_log.clear()

@@ -291,7 +291,7 @@ class ImgFormatTransInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "格式转换完成 ✅")
+        self.createSuccessInfoBar("完成", "格式转换完成")
 
     def start(self):
         self.textEdit_log.clear()

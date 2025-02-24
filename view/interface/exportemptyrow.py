@@ -187,7 +187,7 @@ class ExportEmptyRowInterface(GalleryInterface):
         self.btn_select_path.setEnabled(True)
         self.btn_export.setEnabled(True)
 
-        self.createSuccessInfoBar("完成", "导出成功 ✅")
+        self.createSuccessInfoBar("完成", "导出成功")
 
     def export(self):
         self.textEdit_log.clear()

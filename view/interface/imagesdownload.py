@@ -301,7 +301,7 @@ class ImagesDownloadInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "数据爬取完成 ✅")
+        self.createSuccessInfoBar("完成", "数据爬取完成")
 
     def start_download(self):
         # 检查是否选择了文件夹

@@ -298,7 +298,7 @@ class MitmProxySearchInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "完成 ✅")
+        self.createSuccessInfoBar("完成", "完成")
 
     def on_btn_clicked_setProxy(self):
         """

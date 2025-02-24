@@ -241,7 +241,7 @@ class IncrementalDatasInterface(GalleryInterface):
         self.btn_select_path2.setEnabled(True)
         self.btn_incremental.setEnabled(True)
 
-        self.createSuccessInfoBar("完成", "统计新增加的数据完成 ✅")
+        self.createSuccessInfoBar("完成", "统计新增加的数据完成")
 
     def incremental(self):
         self.textEdit_log.clear()

@@ -409,7 +409,7 @@ class YoloInterface(GalleryInterface):
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
 
-        self.createSuccessInfoBar("完成", "图片识别完成 ✅")
+        self.createSuccessInfoBar("完成", "图片识别完成")
 
     def start(self):
         self.textEdit_log.clear()
