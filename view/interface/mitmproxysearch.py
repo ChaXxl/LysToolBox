@@ -226,6 +226,8 @@ class MitmProxySearchInterface(GalleryInterface):
         self.btn_start_flag = False
         self.btn_setProxy_flag = False
 
+        self.worker: Optional[MitmProxySearchWorker] = None
+
     def __initWidget(self):
         self.view.setObjectName("")
         self.setObjectName("MitmProxySearchInterface")
@@ -440,9 +442,14 @@ class MitmProxySearchInterface(GalleryInterface):
                     None, keyword, Path(output_dir), proxy_ip, int(proxy_port)
                 )
 
+            filename = Path(output_dir) / f"{keyword}.xlsx"
+
             self.worker.logInfo.connect(self.logInfo)
             self.worker.finished.connect(self.finished)
             self.worker.setProgress.connect(self.setProgress)
             self.worker.setProgressInfo.connect(self.setProgressInfo)
+
+            self.worker.addon.createExcel(filename)
+            self.worker.addon.keyword = keyword
 
             self.worker.start()
