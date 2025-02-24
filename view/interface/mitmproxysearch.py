@@ -381,6 +381,13 @@ class MitmProxySearchInterface(GalleryInterface):
     def start(self):
         if self.btn_start_flag:
             self.btn_start.setText("开始")
+
+            self.lineEdit_excelPath.setEnabled(True)
+
+            self.lineEdit_output_path.setEnabled(True)
+
+            self.lineEdit_keyword.setEnabled(True)
+
         else:
             self.textEdit_log.clear()
 
@@ -443,6 +450,8 @@ class MitmProxySearchInterface(GalleryInterface):
                 )
 
             filename = Path(output_dir) / f"{keyword}.xlsx"
+
+            self.textEdit_log.append(f"\n\nExcel 保存在：{self.filename}\n\n")
 
             self.worker.logInfo.connect(self.logInfo)
             self.worker.finished.connect(self.finished)
