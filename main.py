@@ -6,6 +6,7 @@ from qfluentwidgets import FluentIcon as FIF
 from qfluentwidgets import FluentWindow, NavigationItemPosition
 
 from common import resource
+from view.interface.mitmproxysearch import MitmProxySearchInterface
 from view.interface.deleterow import DeleteRowInterface
 from view.interface.fiximgsuffix import FixImageSuffixInterface
 from view.interface.formatExcel import FormatExcelInterface
@@ -31,6 +32,9 @@ class MainWindow(FluentWindow):
         self.initWindow()
 
         # 创建子项目
+
+        # 通过 MitmProxy 代理搜索
+        self.mitmProxySearch_interface = MitmProxySearchInterface(self)
 
         # 京东淘宝自动化
         self.jdtb_interface = JdTBbAutoInterface(self)
@@ -107,6 +111,13 @@ class MainWindow(FluentWindow):
 
     def initNavigation(self):
         pos = NavigationItemPosition.SCROLL
+
+        self.addSubInterface(
+            self.mitmProxySearch_interface,
+            FIF.SEARCH,
+            "通过 MitmProxy 代理搜索",
+            position=pos,
+        )
 
         self.addSubInterface(
             self.jdtb_interface, FIF.PEOPLE, "京东淘宝自动化", position=pos
