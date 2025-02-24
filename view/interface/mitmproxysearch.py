@@ -338,6 +338,7 @@ class MitmProxySearchInterface(GalleryInterface):
                 #  关闭代理
                 self.lineEdit_proxy.setEnabled(True)
                 self.btn_setProxy.setText("打开代理")
+                self.btn_setProxy_flag = False
 
                 subprocess.run(["networksetup", "-setwebproxystate", "AX88179A", "off"])
                 subprocess.run(
@@ -351,6 +352,7 @@ class MitmProxySearchInterface(GalleryInterface):
                 #  设置代理
                 self.lineEdit_proxy.setEnabled(False)
                 self.btn_setProxy.setText("关闭代理")
+                self.btn_setProxy_flag = True
 
                 subprocess.run(
                     ["networksetup", "-setwebproxy", "AX88179A", "127.0.0.1", "9999"]
