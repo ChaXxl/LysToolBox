@@ -59,32 +59,6 @@ class Addon(QThread):
 
         self.sheet = self.workBook.active  # 选取第一个sheet
 
-    def insert_image_from_url_to_excel(self, img_url, cell_position):
-        res = self.h.get(img_url)
-        if res.status_code != 200:
-            return None
-
-        # 创建临时文件
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as f:
-            f.write(res.content)
-            img_path = Path(f.name)
-
-            # 打开图片
-            img = PILImage.open(img_path)
-
-            # 将图片转换为 openpyxl 的 Image 对象
-            img_openpyxl = Image(img)
-
-            # 设置图片大小
-            img_openpyxl.width = 200
-            img_openpyxl.height = 200
-
-            # 将图片插入到 Excel 表格中
-            self.sheet.add_image(img_openpyxl, cell_position)
-
-            # 删除临时文件
-            img_path.unlink()
-
     # 保存数据到 Excel 文件
     def save_to_excel(self, datas: list, tag=None):
         """
