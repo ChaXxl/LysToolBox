@@ -232,40 +232,25 @@ class Addon(QThread):
 
         return True
 
-    def parsejd2HTML(self):
+    def parsejd2HTML(self, html_str: str):
         """
         1. 一行行删除 jd.html 文件中的内容，直到 <li data-sku= 有这个标签，然后再删除这一行之前的内容，即可得到京东的商品列表
         2. 删除倒数几行的 script 标签
         """
 
-        # 读取文件
-        with open(f"{self.jd_html_path}/jd.html", "r", encoding="utf-8") as f:
-            content = f.readlines()
-
         # 删除不需要的内容
-        for i in range(len(content)):
-            if "li data-sku=" in content[i]:
-                content = content[i:]
+        for i in range(len(html_str)):
+            if "li data-sku=" in html_str[i]:
+                html_str = html_str[i:]
                 break
 
-        for i in range(len(content)):
-            if "<script>" in content[i]:
-                content = content[:i]
+        for i in range(len(html_str)):
+            if "<script>" in html_str[i]:
+                html_str = html_str[:i]
                 break
-
-        # 保存文件
-        with open(f"{self.jd_html_path}/jd2.html", "w", encoding="utf-8") as f:
-            f.writelines(content)
-
-        """
-        读取 jd2.html 文件，解析出商品信息
-        """
-        # 读取文件
-        with open(f"{self.jd_html_path}/jd2.html", "r", encoding="utf-8") as f:
-            content = f.read()
 
         # 解析文件
-        html = etree.HTML(content)
+        html = etree.HTML(html_str)
 
         # 商品列表
         try:
@@ -986,16 +971,11 @@ class Addon(QThread):
             if res is None:
                 return
 
-            self.jd_html_path.mkdir(parents=True, exist_ok=True)
-
-            with open(f"{self.jd_html_path}/jd.html", "w", encoding="utf-8") as f:
-                f.write(res)
-
             msg = f"京东后 30 条数据 {url[:50]}\n"
             self.add_text.emit(msg)
             # logger.info(msg)
 
-            self.parsejd2HTML()
+            self.parsejd2HTML(res)
 
         # 京东营业执照
         elif re.match("https://mall.jd.com/showLicence*", url):
