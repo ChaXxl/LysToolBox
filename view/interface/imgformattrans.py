@@ -121,10 +121,14 @@ class TransferWorker(QThread):
         """
         统一的图片转换处理函数
         """
-        with Image.open(source_path) as img:
-            if img.mode in ("RGBA", "LA"):
-                img = self.fill_transparent_background(img)
-            img.convert("RGB").save(target_path, "JPEG", quality=100)
+        try:
+            with Image.open(source_path) as img:
+                if img.mode in ("RGBA", "LA"):
+                    img = self.fill_transparent_background(img)
+                img.convert("RGB").save(target_path, "JPEG", quality=100)
+        except Exception as e:
+            self.logInfo.emit(f"图像处理失败: {source_path} - {e}")
+            raise
 
     @override
     def run(self):
