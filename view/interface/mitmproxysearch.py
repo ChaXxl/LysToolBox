@@ -288,7 +288,6 @@ class MitmProxySearchInterface(GalleryInterface):
     def finished(self):
         # 启用控件
         self.lineEdit_proxy.setEnabled(True)
-        self.btn_setProxy.setEnabled(True)
 
         self.lineEdit_excelPath.setEnabled(True)
         self.btn_select_excel_path.setEnabled(True)
@@ -429,7 +428,6 @@ class MitmProxySearchInterface(GalleryInterface):
 
             # 禁用控件
             self.lineEdit_proxy.setEnabled(False)
-            self.btn_setProxy.setEnabled(False)
 
             self.lineEdit_excelPath.setEnabled(False)
             self.btn_select_excel_path.setEnabled(False)
