@@ -396,6 +396,10 @@ class MitmProxySearchInterface(GalleryInterface):
             # 关键词
             keyword = self.lineEdit_keyword.text()
 
+            if not keyword:
+                self.createErrorInfoBar("错误", "请输入关键词")
+                return
+
             if not any([excel_path, keyword]):
                 self.createErrorInfoBar(
                     "错误", "请选择待搜索药品的 Excel 文件或者关键词"
