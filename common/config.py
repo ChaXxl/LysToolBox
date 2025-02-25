@@ -141,4 +141,7 @@ VERSION = "1.0.0"
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO
-qconfig.load("./data/config.json", cfg)
+if hasattr(sys, '_MEIPASS'):
+    qconfig.load(f'{sys._MEIPASS}/data/config.json', cfg)
+else:
+    qconfig.load("./data/config.json", cfg)
