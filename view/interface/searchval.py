@@ -39,6 +39,7 @@ class SearchValInterface(GalleryInterface):
 
         # 输入查找值
         self.lineEdit_search_val = TextEdit()
+        self.lineEdit_search_val.setPlaceholderText("请输入要查找的值, 一行一个")
 
         self.label_excel_path = BodyLabel(text="Excel 文件所在文件夹: ")
 
