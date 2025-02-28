@@ -5,7 +5,14 @@ from typing import Optional, Union, override
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtGui import QDropEvent
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import BodyLabel, InfoBar, InfoBarPosition, PushButton, TextEdit
+from qfluentwidgets import (
+    BodyLabel,
+    InfoBar,
+    InfoBarPosition,
+    PushButton,
+    TextEdit,
+    ComboBox,
+)
 
 from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEdit
@@ -58,6 +65,13 @@ class SearchValInterface(GalleryInterface):
             )
         )
 
+        # 选择在哪些列中查找: uuid	药店名称	店铺主页	资质名称
+        self.comboBox = ComboBox()
+        self.comboBox.addItem("uuid")
+        self.comboBox.addItem("药店名称")
+        self.comboBox.addItem("店铺主页")
+        self.comboBox.addItem("资质名称")
+
         # 下载按钮
         self.btn_download = PushButton(text="查找")
         self.btn_download.clicked.connect(self.search_val)
@@ -72,6 +86,7 @@ class SearchValInterface(GalleryInterface):
 
         self.vBoxLayout.addLayout(self.hBoxLayout)
         self.vBoxLayout.addWidget(self.lineEdit_search_val)
+        self.vBoxLayout.addWidget(self.comboBox)
         self.vBoxLayout.addWidget(self.btn_download)
         self.vBoxLayout.addWidget(self.textEdit_log)
 
