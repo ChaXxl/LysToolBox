@@ -68,6 +68,9 @@ class SearchValInterface(GalleryInterface):
             )
         )
 
+        self.label_search_column = BodyLabel(text="查找列: ")
+        self.label_search_column.setMaximumWidth(60)
+
         # 选择在哪些列中查找: uuid	药店名称	店铺主页	资质名称
         self.comboBox = ComboBox()
         self.comboBox.addItem("uuid")
@@ -87,6 +90,7 @@ class SearchValInterface(GalleryInterface):
         self.hBoxLayout.addWidget(self.lineEdit_excel_path)
         self.hBoxLayout.addWidget(self.btn_select_path)
 
+        self.hBoxLayout_search.addWidget(self.label_search_column)
         self.hBoxLayout_search.addWidget(self.comboBox)
         self.hBoxLayout_search.addWidget(self.btn_search)
 
