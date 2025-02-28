@@ -171,6 +171,16 @@ class SearchValInterface(GalleryInterface):
         """
         self.textEdit_log.append(info)
 
+    @Slot()
+    def finish(self):
+        self.lineEdit_excel_path.setEnabled(True)
+        self.btn_select_path.setEnabled(True)
+        self.lineEdit_search_val.setEnabled(True)
+        self.comboBox.setEnabled(True)
+        self.btn_search.setEnabled(True)
+
+        self.createSuccessInfoBar("完成", "查找完成")
+
     def search_val(self):
         self.textEdit_log.clear()
 
@@ -194,8 +204,12 @@ class SearchValInterface(GalleryInterface):
         excel_path = Path(self.lineEdit_excel_path.text())
 
         self.lineEdit_excel_path.setEnabled(False)
+        self.btn_select_path.setEnabled(False)
+        self.lineEdit_search_val.setEnabled(False)
+        self.comboBox.setEnabled(False)
         self.btn_search.setEnabled(False)
 
         self.worker = SearchWorker(excel_path, search_val, search_column)
         self.worker.logInfo.connect(self.logInfo)
+        self.worker.finished.connect(self.finish)
         self.worker.start()
