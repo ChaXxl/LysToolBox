@@ -86,7 +86,7 @@ class SearchValInterface(GalleryInterface):
         self.hBoxLayout.addWidget(self.btn_select_path)
 
         self.hBoxLayout_search.addWidget(self.comboBox)
-        self.hBoxLayout_search.addWidget(self.btn_download)
+        self.hBoxLayout_search.addWidget(self.btn_search)
 
         self.vBoxLayout.addLayout(self.hBoxLayout)
         self.vBoxLayout.addWidget(self.lineEdit_search_val)
@@ -154,10 +154,15 @@ class SearchValInterface(GalleryInterface):
             self.createErrorInfoBar("错误", "请选择 Excel 文件所在文件夹")
             return
 
+        # 检查是否输入了查找值
+        search_val = self.lineEdit_search_val.toPlainText().strip()
+        if not search_val:
+            self.createErrorInfoBar("错误", "请输入要查找的值")
+
         excel_path = Path(self.lineEdit_excel_path.text())
 
         self.lineEdit_excel_path.setEnabled(False)
-        self.btn_download.setEnabled(False)
+        self.btn_search.setEnabled(False)
 
         self.worker = SearchWorker(excel_path)
         self.worker.logInfo.connect(self.logInfo)
