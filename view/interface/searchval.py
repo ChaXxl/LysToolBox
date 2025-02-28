@@ -43,6 +43,7 @@ class SearchValInterface(GalleryInterface):
 
         self.vBoxLayout = QVBoxLayout(self.view)
         self.hBoxLayout = QHBoxLayout()
+        self.hBoxLayout_search = QHBoxLayout()
 
         # 输入查找值
         self.lineEdit_search_val = TextEdit()
@@ -84,10 +85,12 @@ class SearchValInterface(GalleryInterface):
         self.hBoxLayout.addWidget(self.lineEdit_excel_path)
         self.hBoxLayout.addWidget(self.btn_select_path)
 
+        self.hBoxLayout_search.addWidget(self.comboBox)
+        self.hBoxLayout_search.addWidget(self.btn_download)
+
         self.vBoxLayout.addLayout(self.hBoxLayout)
         self.vBoxLayout.addWidget(self.lineEdit_search_val)
-        self.vBoxLayout.addWidget(self.comboBox)
-        self.vBoxLayout.addWidget(self.btn_download)
+        self.vBoxLayout.addLayout(self.hBoxLayout_search)
         self.vBoxLayout.addWidget(self.textEdit_log)
 
         self.__initWidget()
