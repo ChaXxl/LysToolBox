@@ -69,8 +69,8 @@ class SearchValInterface(GalleryInterface):
         self.hBoxLayout.addWidget(self.lineEdit_excel_path)
         self.hBoxLayout.addWidget(self.btn_select_path)
 
-        self.vBoxLayout.addWidget(self.lineEdit_search_val)
         self.vBoxLayout.addLayout(self.hBoxLayout)
+        self.vBoxLayout.addWidget(self.lineEdit_search_val)
         self.vBoxLayout.addWidget(self.btn_download)
         self.vBoxLayout.addWidget(self.textEdit_log)
 
