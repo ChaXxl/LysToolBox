@@ -22,10 +22,12 @@ from view.interface.gallery_interface import GalleryInterface
 class SearchWorker(QThread):
     logInfo = Signal(str)
 
-    def __init__(self, root_dir: Path):
+    def __init__(self, root_dir: Path, search_val: [str], search_column: str):
         super().__init__()
 
         self.root_dir = root_dir
+        self.search_val = search_val
+        self.search_column = search_column
 
     @override
     def run(self):
@@ -155,15 +157,21 @@ class SearchValInterface(GalleryInterface):
             return
 
         # 检查是否输入了查找值
-        search_val = self.lineEdit_search_val.toPlainText().strip()
+        search_val: str = self.lineEdit_search_val.toPlainText().strip()
         if not search_val:
             self.createErrorInfoBar("错误", "请输入要查找的值")
+            return
+
+        search_val: [str] = search_val.split("\n")
+
+        # 看用户选择了哪个作为要查找的列
+        search_column = self.comboBox.currentText()
 
         excel_path = Path(self.lineEdit_excel_path.text())
 
         self.lineEdit_excel_path.setEnabled(False)
         self.btn_search.setEnabled(False)
 
-        self.worker = SearchWorker(excel_path)
+        self.worker = SearchWorker(excel_path, search_val, search_column)
         self.worker.logInfo.connect(self.logInfo)
         self.worker.start()
