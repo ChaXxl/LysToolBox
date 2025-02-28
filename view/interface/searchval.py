@@ -145,14 +145,6 @@ class SearchValInterface(GalleryInterface):
         """
         self.textEdit_log.append(info)
 
-    def dropEvent(self, event: QDropEvent):
-        """
-        重写拖拽事件
-        """
-        urls = event.mimeData().urls()
-        if urls:
-            self.lineEdit_excel_path.setText(urls[0].toLocalFile())
-
     def search_val(self):
         self.textEdit_log.clear()
 
