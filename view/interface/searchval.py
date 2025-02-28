@@ -40,18 +40,21 @@ class SearchWorker(QThread):
                 return
 
             for file in excel_files:
-                df = pd.read_excel(file, engine="openpyxl")
+                try:
+                    df = pd.read_excel(file, engine="openpyxl")
 
-                for val in self.search_val:
-                    # 设置 na=False 来忽略 NaN 值
-                    result = df[df[self.search_column].str.contains(val, na=False)]
-                    if result.empty:
-                        continue
+                    for val in self.search_val:
+                        # 设置 na=False 来忽略 NaN 值
+                        result = df[df[self.search_column].str.contains(val, na=False)]
+                        if result.empty:
+                            continue
 
-                    # 打印在哪个文件、第几行找到
-                    self.logInfo.emit(
-                        f"\n在 {file.stem} 中找到 {val}. {result.uuid.iloc[0]} {result.药店名称.iloc[0]} {result.店铺主页.iloc[0]} {result.资质名称.iloc[0]} {result.药品图片.iloc[0]} {result.平台.iloc[0]}"
-                    )
+                        # 打印在哪个文件、第几行找到
+                        self.logInfo.emit(
+                            f"\n在 {file.stem} 中找到 {val}. {result.uuid.iloc[0]} {result.药店名称.iloc[0]} {result.店铺主页.iloc[0]} {result.资质名称.iloc[0]} {result.药品图片.iloc[0]} {result.平台.iloc[0]}"
+                        )
+                except Exception as e:
+                    continue
 
         except Exception as e:
             self.logInfo.emit(f"失败: {e}")
