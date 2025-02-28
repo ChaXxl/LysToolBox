@@ -73,9 +73,9 @@ class SearchValInterface(GalleryInterface):
         self.comboBox.addItem("店铺主页")
         self.comboBox.addItem("资质名称")
 
-        # 下载按钮
-        self.btn_download = PushButton(text="查找")
-        self.btn_download.clicked.connect(self.search_val)
+        # 查找按钮
+        self.btn_search = PushButton(text="查找")
+        self.btn_search.clicked.connect(self.search_val)
 
         # 文本框 用于打印日志
         self.textEdit_log = TextEdit()
