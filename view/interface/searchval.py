@@ -13,6 +13,7 @@ from qfluentwidgets import (
     PushButton,
     TextEdit,
     ComboBox,
+    SwitchButton,
 )
 
 from common.config import cfg
@@ -23,18 +24,25 @@ from view.interface.gallery_interface import GalleryInterface
 class SearchWorker(QThread):
     logInfo = Signal(str)
 
-    def __init__(self, root_dir: Path, search_val: [str], search_column: str):
+    def __init__(
+        self, root_dir: Path, search_val: [str], search_column: str, recursive: bool
+    ):
         super().__init__()
 
         self.root_dir = root_dir
         self.search_val = search_val
         self.search_column = search_column
+        self.recursive = recursive
 
     @override
     def run(self):
         try:
             # 读取 root_dir 下所有 Excel 文件
-            excel_files = list(self.root_dir.glob("*.xlsx"))
+            if self.recursive:
+                excel_files = list(self.root_dir.rglob("*.xlsx"))
+            else:
+                excel_files = list(self.root_dir.glob("*.xlsx"))
+
             if not excel_files:
                 self.logInfo.emit("没有找到 Excel 文件")
                 return
@@ -101,6 +109,14 @@ class SearchValInterface(GalleryInterface):
         self.comboBox.addItem("店铺主页")
         self.comboBox.addItem("资质名称")
 
+        # 是否递归搜索
+        self.label_recursive = BodyLabel(text="是否递归搜索: ")
+        self.label_recursive.setMaximumWidth(90)
+        self.switchButton = SwitchButton()
+        self.switchButton.setOnText("")
+        self.switchButton.setOffText("")
+        self.switchButton.setMaximumWidth(80)
+
         # 查找按钮
         self.btn_search = PushButton(text="查找")
         self.btn_search.clicked.connect(self.search_val)
@@ -115,6 +131,8 @@ class SearchValInterface(GalleryInterface):
 
         self.hBoxLayout_search.addWidget(self.label_search_column)
         self.hBoxLayout_search.addWidget(self.comboBox)
+        self.hBoxLayout_search.addWidget(self.label_recursive)
+        self.hBoxLayout_search.addWidget(self.switchButton)
         self.hBoxLayout_search.addWidget(self.btn_search)
 
         self.vBoxLayout.addLayout(self.hBoxLayout)
@@ -206,13 +224,16 @@ class SearchValInterface(GalleryInterface):
 
         excel_path = Path(self.lineEdit_excel_path.text())
 
+        # 获取是否递归搜索
+        recursive = self.switchButton.isChecked()
+
         self.lineEdit_excel_path.setEnabled(False)
         self.btn_select_path.setEnabled(False)
         self.lineEdit_search_val.setEnabled(False)
         self.comboBox.setEnabled(False)
         self.btn_search.setEnabled(False)
 
-        self.worker = SearchWorker(excel_path, search_val, search_column)
+        self.worker = SearchWorker(excel_path, search_val, search_column, recursive)
         self.worker.logInfo.connect(self.logInfo)
         self.worker.finished.connect(self.finish)
         self.worker.start()
