@@ -70,6 +70,14 @@ class SearchValInterface(GalleryInterface):
         self.hBoxLayout = QHBoxLayout()
         self.hBoxLayout_search = QHBoxLayout()
 
+        # 选择路径的按钮
+        self.btn_select_path = PushButton(text="···")
+        self.btn_select_path.clicked.connect(
+            lambda: self.lineEdit_excel_path.setText(
+                QFileDialog.getExistingDirectory(self, "选择文件夹")
+            )
+        )
+
         # 输入查找值
         self.lineEdit_search_val = TextEdit()
         self.lineEdit_search_val.setPlaceholderText("请输入要查找的值, 一行一个")
@@ -81,14 +89,6 @@ class SearchValInterface(GalleryInterface):
         self.lineEdit_excel_path.setPlaceholderText("请选择 Excel 文件所在文件夹")
         self.lineEdit_excel_path.textChanged.connect(
             lambda: cfg.set(cfg.searchval_excel_path, self.lineEdit_excel_path.text())
-        )
-
-        # 选择路径的按钮
-        self.btn_select_path = PushButton(text="···")
-        self.btn_select_path.clicked.connect(
-            lambda: self.lineEdit_excel_path.setText(
-                QFileDialog.getExistingDirectory(self, "选择文件夹")
-            )
         )
 
         self.label_search_column = BodyLabel(text="查找列: ")
