@@ -202,7 +202,7 @@ class Addon(QThread):
                 if brand in name:
                     return True
 
-        return True
+        return False
 
     def parsejd2HTML(self, html_str: str):
         """
