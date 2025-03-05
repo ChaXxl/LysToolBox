@@ -19,7 +19,8 @@ class FormatWorker(QThread):
     logInfo = Signal(str)
 
     # 删除的列名
-    COLUMNS_TO_DROP = ["营业执照图片", "药品图片", "原价"]
+    # COLUMNS_TO_DROP = ["营业执照图片", "药品图片", "原价"]
+    COLUMNS_TO_DROP = ["营业执照图片", "原价"]
 
     def __init__(self, excel_dir: Path):
         super().__init__()
