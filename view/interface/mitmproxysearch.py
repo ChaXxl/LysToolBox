@@ -287,6 +287,19 @@ class MitmProxySearchInterface(GalleryInterface):
 
         self.createSuccessInfoBar("完成", "完成")
 
+    @Slot()
+    def set_keyword(self):
+        """
+        设置关键词
+        """
+        keyword = self.lineEdit_keyword.text()
+        self.worker.addon.keyword = keyword
+
+        filename = Path(self.lineEdit_output_path.text()) / f"{keyword}.xlsx"
+        self.worker.addon.createExcel(filename)
+
+        self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
+        
     def on_btn_clicked_setProxy(self):
         """
         设置代理
