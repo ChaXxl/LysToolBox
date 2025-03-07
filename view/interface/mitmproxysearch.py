@@ -139,8 +139,9 @@ class MitmProxySearchInterface(GalleryInterface):
             lambda: cfg.set(cfg.mitmProxySearch_keyword, self.lineEdit_keyword.text())
         )
 
-        # 下一个
-        self.btn_next = PushButton(text="下一个")
+        # 修改
+        self.btn_next = PushButton(text="修改")
+        self.btn_next.clicked.connect(self.set_keyword)
 
         # 开始按钮
         self.btn_start = TogglePushButton(text="开始")
