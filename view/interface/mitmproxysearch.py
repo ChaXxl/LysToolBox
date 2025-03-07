@@ -51,7 +51,7 @@ class MitmProxySearchWorker(QThread):
         self.options = Options(listen_host=proxy_ip, listen_port=proxy_port)
         self.m: Optional[DumpMaster] = None
 
-    async def start_mitm(self):
+    async def start_mitm(self):        
         self.m = DumpMaster(options=self.options)
         self.m.addons.add(self.addon)
         await self.m.run()
@@ -59,24 +59,6 @@ class MitmProxySearchWorker(QThread):
     @override
     def run(self):
         start = datetime.now()
-
-        # if self.excel_path:
-        # wb = load_workbook(self.excel_path, read_only=True, data_only=True)
-        # ws = wb.active
-        #
-        # keywords: [str] = [
-        #     row[1] for row in ws.iter_rows(min_row=2, values_only=True)
-        # ]
-
-        # for idx, keyword in enumerate(keywords):
-        #     self.setProgress.emit((idx + 1) // len(keywords) * 100)
-        #     self.setProgressInfo.emit(idx + 1, len(keywords))
-        #
-        #     if Path(self.output_dir, f"{keyword}.xlsx").exists():
-        #         self.logInfo.emit(f"{keyword} 已经存在，跳过")
-        #         continue
-        #
-        # elif self.keyword:
 
         asyncio.run(self.start_mitm())
 
@@ -148,7 +130,7 @@ class MitmProxySearchInterface(GalleryInterface):
         )
 
         # 关键词
-        self.label_keyword = BodyLabel(text="关键词 (可选): ")
+        self.label_keyword = BodyLabel(text="关键词: ")
         self.label_keyword.setMaximumWidth(100)
         self.lineEdit_keyword = DropableLineEditExcel()
         self.lineEdit_keyword.setPlaceholderText("")
@@ -293,10 +275,12 @@ class MitmProxySearchInterface(GalleryInterface):
         self.btn_select_excel_path.setEnabled(True)
 
         self.lineEdit_output_path.setEnabled(True)
+        self.btn_select_output_path.setEnabled(True)
 
         self.lineEdit_keyword.setEnabled(True)
 
         self.btn_start.setText("开始")
+        self.btn_start_flag = False
 
         if self.stateTooltip is not None:
             self.stateTooltip.hide()
@@ -379,13 +363,17 @@ class MitmProxySearchInterface(GalleryInterface):
 
     def start(self):
         if self.btn_start_flag:
-            self.btn_start.setText("开始")
-
+            # 启用控件
             self.lineEdit_excelPath.setEnabled(True)
+            self.btn_select_excel_path.setEnabled(True)
 
             self.lineEdit_output_path.setEnabled(True)
+            self.btn_select_output_path.setEnabled(True)
 
             self.lineEdit_keyword.setEnabled(True)
+
+            self.btn_start.setText("开始")
+            self.btn_start_flag = False
 
         else:
             self.textEdit_log.clear()
@@ -410,17 +398,17 @@ class MitmProxySearchInterface(GalleryInterface):
                 self.createErrorInfoBar("错误", "请输入关键词")
                 return
 
-            if not any([excel_path, keyword]):
-                self.createErrorInfoBar(
-                    "错误", "请选择待搜索药品的 Excel 文件或者关键词"
-                )
-                return
-
-            if all([excel_path, keyword]):
-                self.createErrorInfoBar(
-                    "错误", "只能选择待搜索药品的 Excel 文件或者关键词"
-                )
-                return
+            # if not any([excel_path, keyword]):
+            #     self.createErrorInfoBar(
+            #         "错误", "请选择待搜索药品的 Excel 文件或者关键词"
+            #     )
+            #     return
+            #
+            # if all([excel_path, keyword]):
+            #     self.createErrorInfoBar(
+            #         "错误", "只能选择待搜索药品的 Excel 文件或者关键词"
+            #     )
+            #     return
 
             # 获取代理 IP 和端口
             proxy = self.lineEdit_proxy.text().strip()
@@ -438,14 +426,14 @@ class MitmProxySearchInterface(GalleryInterface):
 
             self.btn_start.setText("停止")
 
-            if excel_path:
-                self.worker = MitmProxySearchWorker(
-                    Path(excel_path), "", Path(output_dir), proxy_ip, int(proxy_port)
-                )
-            elif keyword:
-                self.worker = MitmProxySearchWorker(
-                    None, keyword, Path(output_dir), proxy_ip, int(proxy_port)
-                )
+            # if excel_path:
+            #     self.worker = MitmProxySearchWorker(
+            #         Path(excel_path), "", Path(output_dir), proxy_ip, int(proxy_port)
+            #     )
+            # elif keyword:
+            self.worker = MitmProxySearchWorker(
+                None, keyword, Path(output_dir), proxy_ip, int(proxy_port)
+            )
 
             self.btn_start_flag = True
 
