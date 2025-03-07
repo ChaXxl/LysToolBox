@@ -278,8 +278,6 @@ class MitmProxySearchInterface(GalleryInterface):
         self.lineEdit_output_path.setEnabled(True)
         self.btn_select_output_path.setEnabled(True)
 
-        self.lineEdit_keyword.setEnabled(True)
-
         self.btn_start.setText("开始")
         self.btn_start_flag = False
 
@@ -384,8 +382,6 @@ class MitmProxySearchInterface(GalleryInterface):
             self.lineEdit_output_path.setEnabled(True)
             self.btn_select_output_path.setEnabled(True)
 
-            self.lineEdit_keyword.setEnabled(True)
-
             self.btn_start.setText("开始")
             self.btn_start_flag = False
 
@@ -435,8 +431,6 @@ class MitmProxySearchInterface(GalleryInterface):
             self.btn_select_excel_path.setEnabled(False)
 
             self.lineEdit_output_path.setEnabled(False)
-
-            self.lineEdit_keyword.setEnabled(False)
 
             self.btn_start.setText("停止")
 
