@@ -253,6 +253,11 @@ class MitmProxySearchInterface(GalleryInterface):
         """
         self.textEdit_log.append(info)
 
+        # 滑动到底部
+        self.textEdit_log.verticalScrollBar().setValue(
+            self.textEdit_log.verticalScrollBar().maximum()
+        )
+
     @Slot(int)
     def setProgress(self, value):
         """
