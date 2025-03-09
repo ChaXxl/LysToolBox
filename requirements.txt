@@ -4,6 +4,7 @@ PySide6
 tqdm
 PySide6-Fluent-Widgets
 numpy
+mitmproxy
 openpyxl
 opencv-python
 onnxruntime
