@@ -11,13 +11,19 @@ from mitmproxy.tools.dump import DumpMaster
 from openpyxl.reader.excel import load_workbook
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
-                            PushButton, TextEdit, TogglePushButton)
+from qfluentwidgets import (
+    BodyLabel,
+    InfoBar,
+    InfoBarPosition,
+    ProgressBar,
+    PushButton,
+    TextEdit,
+    TogglePushButton,
+)
 
 from common.config import cfg
 from utils.mitm_addon import Addon
-from view.components.dropable_lineEdit import (DropableLineEditDir,
-                                               DropableLineEditExcel)
+from view.components.dropable_lineEdit import DropableLineEditDir, DropableLineEditExcel
 from view.interface.gallery_interface import GalleryInterface
 
 
@@ -45,7 +51,7 @@ class MitmProxySearchWorker(QThread):
         self.options = Options(listen_host=proxy_ip, listen_port=proxy_port)
         self.m: Optional[DumpMaster] = None
 
-    async def start_mitm(self):        
+    async def start_mitm(self):
         self.m = DumpMaster(options=self.options)
         self.m.addons.add(self.addon)
         await self.m.run()
@@ -297,7 +303,7 @@ class MitmProxySearchInterface(GalleryInterface):
         self.worker.addon.createExcel(filename)
 
         self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
-        
+
     def on_btn_clicked_setProxy(self):
         """
         设置代理
