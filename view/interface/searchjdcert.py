@@ -45,8 +45,7 @@ class SearchJdCertWorker(QThread):
         # 预先编译正则表达式
         self.store_name_pattern = re.compile(r'document\.title="(.*?)"')
 
-    @staticmethod
-    def filter_data(excel_file: Path) -> list[str]:
+    def filter_data(self, excel_file: Path) -> list[str]:
         """
         从 Excel 文件中过滤店铺主页不为空、资质名称为空、平台为京东的记录
         """
@@ -63,7 +62,7 @@ class SearchJdCertWorker(QThread):
 
             return df.loc[mask, "店铺主页"].tolist()
         except Exception as e:
-            logger.error(f"读取 {excel_file} 文件失败: {e}")
+            self.logInfo.emit(f"读取 {excel_file} 文件失败: {e}")
             return []
 
     def ocr_classification(self, image: bytes) -> Union[str, dict]:
@@ -73,7 +72,7 @@ class SearchJdCertWorker(QThread):
         try:
             return self.ocr.classification(image)
         except Exception as e:
-            logger.error(f"识别验证码失败: {e}")
+            self.logInfo.emit(f"识别验证码失败: {e}")
             return ""
 
     def parse(self, res: str) -> None:
@@ -88,23 +87,20 @@ class SearchJdCertWorker(QThread):
             storeName = storeName.group(1).strip() if storeName else ""
 
             if not storeName or "根据国家相关政策" in companyName:
-                logger.warning(f"店铺名称或公司名称为空: {storeName} {companyName}")
+                self.logInfo.emit(f"店铺名称或公司名称为空: {storeName} {companyName}")
                 return
 
             self.write_to_excel(storeName, companyName)
         except Exception as e:
-            logger.error(f"解析营业执照页面失败: {e}")
+            self.logInfo.emit(f"解析营业执照页面失败: {e}")
 
     def write_to_excel(self, storeName: str, companyName: str) -> None:
         """
         将店铺和公司名写入 Excel 文件
         """
-        for file in self.dir.glob("*.xlsx"):
-            if any(keyword in file.stem for keyword in ["~", "对照", "排查"]):
-                continue
-
+        if self.excel_path.is_file():
             try:
-                df = pd.read_excel(file)
+                df = pd.read_excel(self.excel_path)
                 updates = 0
 
                 # 检查药店名称是否是 storeName, 如果是并且资质名称列为空, 则更新
@@ -114,14 +110,38 @@ class SearchJdCertWorker(QThread):
 
                     updates += 1
                     df.loc[index, "资质名称"] = companyName
-                    df.to_excel(file, index=False)
+                    df.to_excel(self.excel_path, index=False)
 
                 if updates:
-                    logger.success(
-                        f"{file.stem} 更新了 {updates} 行, {storeName} 的资质名称为 {companyName}"
+                    self.logInfo.emit(
+                        f"{self.excel_path.stem} 更新了 {updates} 行, {storeName} 的资质名称为 {companyName}"
                     )
             except Exception as e:
-                logger.error(f"写入 {file.stem} 文件失败: {e}")
+                self.logInfo.emit(f"写入 {self.excel_path.stem} 文件失败: {e}") 
+        elif self.excel_path.is_dir():
+            for file in self.excel_path.glob("*.xlsx"):
+                if any(keyword in file.stem for keyword in ["~", "对照", "排查"]):
+                    continue
+
+                try:
+                    df = pd.read_excel(file)
+                    updates = 0
+
+                    # 检查药店名称是否是 storeName, 如果是并且资质名称列为空, 则更新
+                    for index, row in df.iterrows():
+                        if row["药店名称"] != storeName or pd.notna(row["资质名称"]):
+                            continue
+
+                        updates += 1
+                        df.loc[index, "资质名称"] = companyName
+                        df.to_excel(file, index=False)
+
+                    if updates:
+                        self.logInfo.emit(
+                            f"{file.stem} 更新了 {updates} 行, {storeName} 的资质名称为 {companyName}"
+                        )
+                except Exception as e:
+                    self.logInfo.emit(f"写入 {file.stem} 文件失败: {e}")
 
     def process_url(self, url: str) -> None:
         """
@@ -150,7 +170,7 @@ class SearchJdCertWorker(QThread):
             if res:
                 self.parse(res.response.body)
         except Exception as e:
-            logger.error(f"处理 {url} 出错: {e}")
+            self.logInfo.emit(f"处理 {url} 出错: {e}")
 
     @override
     def run(self):
