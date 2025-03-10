@@ -7,25 +7,25 @@ from qfluentwidgets import FluentIcon as FIF
 from qfluentwidgets import FluentWindow, NavigationItemPosition
 
 from common import resource
-from view.interface.mitmproxysearch import MitmProxySearchInterface
 from view.interface.deleterow import DeleteRowInterface
+from view.interface.exportemptyrow import ExportEmptyRowInterface
 from view.interface.fiximgsuffix import FixImageSuffixInterface
 from view.interface.formatExcel import FormatExcelInterface
 from view.interface.imagesdownload import ImagesDownloadInterface
 from view.interface.imgformattrans import ImgFormatTransInterface
+from view.interface.incrementaldatas import IncrementalDatasInterface
 from view.interface.jdtbauto import JdTBbAutoInterface
+from view.interface.mergedexcelFiles import MergedExcelFilesInterface
+from view.interface.mitmproxysearch import MitmProxySearchInterface
+from view.interface.recheck import ReCheckInterface
 from view.interface.savetodatabase import SaveToDatabaseInterface
+from view.interface.searchjdcert import SearchJdCertInterface
 from view.interface.searchval import SearchValInterface
 from view.interface.setting import SettingInterface
 from view.interface.statistics import StatisticsInterface
-from view.interface.incrementaldatas import IncrementalDatasInterface
 from view.interface.updatecert import UpdateCertInterface
 from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yoloinference import YoloInterface
-from view.interface.mergedexcelFiles import MergedExcelFilesInterface
-from view.interface.recheck import ReCheckInterface
-from view.interface.searchjdcert import SearchJdCertInterface
-from view.interface.exportemptyrow import ExportEmptyRowInterface
 
 
 class MainWindow(FluentWindow):

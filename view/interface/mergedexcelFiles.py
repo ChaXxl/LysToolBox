@@ -3,18 +3,14 @@ from pathlib import Path
 from typing import Optional, override
 
 import pandas as pd
-from PySide6.QtCore import QThread, Slot, Qt, Signal
-from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFileDialog
-from qfluentwidgets import (
-    BodyLabel,
-    PushButton,
-    TextEdit,
-    InfoBar,
-    InfoBarPosition,
-)
+from PySide6.QtCore import Qt, QThread, Signal, Slot
+from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, PushButton,
+                            TextEdit)
+
+from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEditDir
 from view.interface.gallery_interface import GalleryInterface
-from common.config import cfg
 
 
 class MergedExcelFilesWorker(QThread):

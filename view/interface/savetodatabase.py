@@ -6,16 +6,10 @@ import pandas as pd
 import psycopg as pg
 from psycopg import sql
 from PySide6.QtCore import Qt, QThread, Signal, Slot
-from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
-from qfluentwidgets import (
-    BodyLabel,
-    InfoBar,
-    InfoBarPosition,
-    LineEdit,
-    PasswordLineEdit,
-    PushButton,
-    TextEdit,
-)
+from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QVBoxLayout,
+                               QWidget)
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, LineEdit,
+                            PasswordLineEdit, PushButton, TextEdit)
 
 from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEdit

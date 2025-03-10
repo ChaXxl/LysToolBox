@@ -6,17 +6,10 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog, QLabel, QWidget
 from qfluentwidgets import ExpandLayout
 from qfluentwidgets import FluentIcon as FIF
-from qfluentwidgets import (
-    InfoBar,
-    InfoBarPosition,
-    OptionsSettingCard,
-    PrimaryPushSettingCard,
-    PushSettingCard,
-    ScrollArea,
-    SettingCardGroup,
-    SwitchSettingCard,
-    setTheme,
-)
+from qfluentwidgets import (InfoBar, InfoBarPosition, OptionsSettingCard,
+                            PrimaryPushSettingCard, PushSettingCard,
+                            ScrollArea, SettingCardGroup, SwitchSettingCard,
+                            setTheme)
 
 from common.config import AUTHOR, VERSION, YEAR, cfg
 from common.style_sheet import StyleSheet

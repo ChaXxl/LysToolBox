@@ -1,8 +1,8 @@
 # coding:utf-8
 import asyncio
+import subprocess
 from datetime import datetime
 from pathlib import Path
-import subprocess
 from platform import system
 from typing import Optional, override
 
@@ -11,19 +11,13 @@ from mitmproxy.tools.dump import DumpMaster
 from openpyxl.reader.excel import load_workbook
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (
-    BodyLabel,
-    InfoBar,
-    InfoBarPosition,
-    ProgressBar,
-    PushButton,
-    TogglePushButton,
-    TextEdit,
-)
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
+                            PushButton, TextEdit, TogglePushButton)
 
-from utils.mitm_addon import Addon
 from common.config import cfg
-from view.components.dropable_lineEdit import DropableLineEditDir, DropableLineEditExcel
+from utils.mitm_addon import Addon
+from view.components.dropable_lineEdit import (DropableLineEditDir,
+                                               DropableLineEditExcel)
 from view.interface.gallery_interface import GalleryInterface
 
 

@@ -2,23 +2,17 @@
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, override
 from threading import Lock
+from typing import Optional, override
 
-import pillow_avif
 import filetype
 import imageio.v3 as iio
+import pillow_avif
 from PIL import Image
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (
-    BodyLabel,
-    InfoBar,
-    InfoBarPosition,
-    ProgressBar,
-    PushButton,
-    TextEdit,
-)
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
+                            PushButton, TextEdit)
 
 from common.config import cfg
 from view.components.dropable_lineEdit import DropableLineEdit

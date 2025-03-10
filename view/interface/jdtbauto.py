@@ -6,19 +6,14 @@ from typing import Optional, override
 from openpyxl.reader.excel import load_workbook
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (
-    BodyLabel,
-    InfoBar,
-    InfoBarPosition,
-    ProgressBar,
-    PushButton,
-    TextEdit,
-)
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
+                            PushButton, TextEdit)
 
 from common.config import cfg
 from utils.jd import JD
 from utils.tb import TB
-from view.components.dropable_lineEdit import DropableLineEditDir, DropableLineEditExcel
+from view.components.dropable_lineEdit import (DropableLineEditDir,
+                                               DropableLineEditExcel)
 from view.interface.gallery_interface import GalleryInterface
 
 

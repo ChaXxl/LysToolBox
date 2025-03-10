@@ -8,18 +8,13 @@ import numpy as np
 import onnxruntime as ort
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
-from qfluentwidgets import (
-    BodyLabel,
-    InfoBar,
-    InfoBarPosition,
-    ProgressBar,
-    PushButton,
-    TextEdit,
-)
+from qfluentwidgets import (BodyLabel, InfoBar, InfoBarPosition, ProgressBar,
+                            PushButton, TextEdit)
 
 from common.config import cfg
 from utils.classnames import CLASS_NAMES
-from view.components.dropable_lineEdit import DropableLineEditDir, DropableLineEditOnnx
+from view.components.dropable_lineEdit import (DropableLineEditDir,
+                                               DropableLineEditOnnx)
 from view.interface.gallery_interface import GalleryInterface
 
 
