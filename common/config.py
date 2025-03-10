@@ -128,6 +128,9 @@ class Config(QConfig):
     recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "")
     recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", FolderValidator())
 
+    # 京东营业执照
+    searchJdCert_excel_path = ConfigItem("SearchJdCert", "ExcelPath", "", "")
+
     # 导出资质空白的行
     exportEmptyRow_excel_path = ConfigItem("ExportEmptyRow", "ExcelPath", "", "")
     exportEmptyRow_output_path = ConfigItem(
@@ -141,7 +144,7 @@ VERSION = "1.0.0"
 
 cfg = Config()
 cfg.themeMode.value = Theme.AUTO
-if hasattr(sys, '_MEIPASS'):
-    qconfig.load(f'{sys._MEIPASS}/data/config.json', cfg)
+if hasattr(sys, "_MEIPASS"):
+    qconfig.load(f"{sys._MEIPASS}/data/config.json", cfg)
 else:
     qconfig.load("./data/config.json", cfg)
