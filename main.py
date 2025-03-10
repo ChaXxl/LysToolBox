@@ -24,6 +24,7 @@ from view.interface.writeexcel import WriteExcelInterface
 from view.interface.yoloinference import YoloInterface
 from view.interface.mergedexcelFiles import MergedExcelFilesInterface
 from view.interface.recheck import ReCheckInterface
+from view.interface.searchjdcert import SearchJdCertInterface
 from view.interface.exportemptyrow import ExportEmptyRowInterface
 
 
@@ -87,6 +88,9 @@ class MainWindow(FluentWindow):
 
         # 复查数据
         self.reCheckInterface = ReCheckInterface(self)
+
+        # 查找京东的资质名称
+        self.searchJdCertInterface = SearchJdCertInterface()
 
         # 导出资质名称为空的行数
         self.exportEmptyRowInterface = ExportEmptyRowInterface(self)
@@ -178,6 +182,13 @@ class MainWindow(FluentWindow):
 
         self.addSubInterface(
             self.reCheckInterface, FIF.IMAGE_EXPORT, "复查数据", position=pos
+        )
+
+        self.addSubInterface(
+            self.searchJdCertInterface,
+            FIF.IMAGE_EXPORT,
+            "查找京东的资质名称",
+            position=pos,
         )
 
         self.addSubInterface(
