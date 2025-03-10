@@ -5,6 +5,12 @@ from pathlib import Path
 from typing import Optional, Union, override
 
 import ddddocr
+
+from PIL import Image
+
+if not hasattr(Image, "ANTIALIAS"):
+    setattr(Image, "ANTIALIAS", Image.LANCZOS)
+
 import pandas as pd
 from DrissionPage import Chromium
 from DrissionPage.common import Keys
@@ -117,7 +123,7 @@ class SearchJdCertWorker(QThread):
                         f"{self.excel_path.stem} 更新了 {updates} 行, {storeName} 的资质名称为 {companyName}"
                     )
             except Exception as e:
-                self.logInfo.emit(f"写入 {self.excel_path.stem} 文件失败: {e}") 
+                self.logInfo.emit(f"写入 {self.excel_path.stem} 文件失败: {e}")
         elif self.excel_path.is_dir():
             for file in self.excel_path.glob("*.xlsx"):
                 if any(keyword in file.stem for keyword in ["~", "对照", "排查"]):
@@ -361,5 +367,7 @@ class SearchJdCertInterface(GalleryInterface):
 
         self.worker = SearchJdCertWorker(excel_path)
         self.worker.logInfo.connect(self.logInfo)
+        self.worker.setProgress.connect(self.setProgress)
+        self.worker.setProgressInfo.connect(self.setProgressInfo)
         self.worker.finished.connect(self.finished)
         self.worker.start()
