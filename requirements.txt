@@ -1,5 +1,6 @@
 httpx
 drissionpage
+ddddocr
 PySide6
 tqdm
 PySide6-Fluent-Widgets
