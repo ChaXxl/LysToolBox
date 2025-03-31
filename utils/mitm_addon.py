@@ -613,15 +613,6 @@ class Addon(QThread):
         self.save_to_excel(datas, "美团")
         # self.save.to_excel(datas, "美团")
 
-    def meituan_certificate(self, res):
-        img_url = res.get("data").get("poi_qualify_details", [])[0].get("qualify_pic")
-
-        pyperclip.copy(img_url)
-
-        msg = img_url
-        self.add_text.emit(msg)
-        # logger.info(img_url)
-
     # 淘宝天猫
     def taobao(self, res):
         datas = []
@@ -844,16 +835,6 @@ class Addon(QThread):
             self.add_text.emit(msg)
 
             self.meituan(res)
-
-        # 美团营业执照
-        elif re.match("https://yiyao-h5.meituan.com/wedrug/v2/poi/qualification*", url):
-            res = flow.response.json()
-
-            msg = f"\n美团营业执照 {url[:50]}\n"
-            self.add_text.emit(msg)
-
-            # self.thread.submit(self.meituan_certificate, res)
-            self.meituan_certificate(res)
 
         # 淘宝天猫
         elif re.match(
