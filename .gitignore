@@ -6,4 +6,4 @@ build
 dist
 temp
 __pycache__
-data/config.json
+data/lys_config.json
