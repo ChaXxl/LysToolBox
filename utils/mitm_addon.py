@@ -93,6 +93,7 @@ class Addon(QThread):
             "资质名称",
             "营业执照图片",
             "药品名",
+            "药品ID",
             "药品图片",
             "原价",
             "挂网价格",
@@ -288,7 +289,7 @@ class Addon(QThread):
             # productName = self.product_name_not
             productName = self.keyword
 
-            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
                     "",
@@ -297,12 +298,12 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
+                    "",
                     productImg,
                     "",
                     price,
                     "京东",
                     t,
-                    # data_sku,
                 ]
             )
 
@@ -378,7 +379,7 @@ class Addon(QThread):
             # productName = self.product_name_not
             productName = self.keyword
 
-            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
                     "",
@@ -387,6 +388,7 @@ class Addon(QThread):
                     storeName,
                     "",
                     productName,
+                    "",
                     productImg,
                     "",
                     price,
@@ -446,7 +448,7 @@ class Addon(QThread):
 
             productName = self.keyword
 
-            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
                     "",
@@ -455,6 +457,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
+                    "",
                     productImg,
                     "",
                     price,
@@ -505,6 +508,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
+                    "",
                     productImg,
                     "",
                     price,
@@ -694,7 +698,7 @@ class Addon(QThread):
 
                 productName = self.keyword
 
-                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
                 datas.append(
                     [
                         "",
@@ -703,6 +707,7 @@ class Addon(QThread):
                         "",
                         "",
                         productName,
+                        "",
                         productImg,
                         original_price,
                         price,
@@ -775,7 +780,7 @@ class Addon(QThread):
 
             productName = self.keyword
 
-            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
                     "",
@@ -784,6 +789,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
+                    "",
                     productImg,
                     "",
                     price,
@@ -829,7 +835,7 @@ class Addon(QThread):
 
                 productName = self.keyword
 
-                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
                 datas.append(
                     [
                         "",
@@ -838,6 +844,7 @@ class Addon(QThread):
                         "",
                         "",
                         productName,
+                        "",
                         productImg,
                         "",
                         price,
