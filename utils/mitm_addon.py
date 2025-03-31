@@ -551,26 +551,6 @@ class Addon(QThread):
         msg = f"{mall_name} {business_licence_url}"
         self.add_text.emit(msg)
 
-    # 拼多多获取店铺名称
-    def pdd_getStoreName(self, url, headers):
-        headers = {
-            "Accept-Encoding": "gzip, deflate, br",
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; M2007J20CG Build/QKQ1.200419.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/88.0.4324.93 Mobile Safari/537.36  phh_android_version/4.0.0 phh_android_build/4.0.0",
-            "Cookie": "api_uid=CkpQd2X9pUAtYwBb54tIAg==; dilx=XylHWpgGOP2lsS6QnElWr; _nano_fp=XpmaXpgxXpmyn5TyX9_EZssZbdt8iKMrKSaUP52d; webp=1; jrpl=2cL03dX8PPS7GlUREfdw3IpXlNuVV00t; njrpl=2cL03dX8PPS7GlUREfdw3IpXlNuVV00t; PDDAccessToken=JJQAWIJHZMVZNPNZMYARSXTWVDLOTM3E65SEVY2RG25LXO63BS6Q12386c3; pdd_user_id=2359560315782; pdd_user_uin=LE6B4K2RMNMWXS2OWJA7J2LINY_GEXDA; rec_list_personal=rec_list_personal_n2eiy9; JSESSIONID=4AFF63C72AAFD40BE93E48900573FCD2; pdd_vds=gadLxOIPnLEisywGOtlElLGGyaGblyLnNNtyOQGNsGEQxQLPLLOyLtmyEaLn",
-        }
-
-        res = self.h.get(url, headers=headers)
-        res = res.json()
-
-        try:
-            storeName = res["result"]["mall_basic_info"]["mall_name"]
-
-            # storeName = re.findall('\"mallName\":\"(.*?)\"', res)[0]
-        except:
-            storeName = ""
-
-        return storeName
-
     # 拼多多手机端搜索结果
     def pdd_mobild_search(self, res, headers):
         """
