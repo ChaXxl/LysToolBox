@@ -18,6 +18,8 @@ from openpyxl.drawing.image import Image
 from PIL import Image as PILImage
 from PySide6.QtCore import QThread, Signal
 
+from medicineID import MEDICINE_ID
+
 
 class Addon(QThread):
     add_text = Signal(str)
@@ -289,6 +291,9 @@ class Addon(QThread):
             # productName = self.product_name_not
             productName = self.keyword
 
+            # 药品ID
+            medicine_id = MEDICINE_ID.get(productName, "")
+
             # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
@@ -298,7 +303,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
-                    "",
+                    medicine_id,
                     productImg,
                     "",
                     price,
@@ -379,6 +384,9 @@ class Addon(QThread):
             # productName = self.product_name_not
             productName = self.keyword
 
+            # 药品ID
+            medicine_id = MEDICINE_ID.get(productName, "")
+
             # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
@@ -388,7 +396,7 @@ class Addon(QThread):
                     storeName,
                     "",
                     productName,
-                    "",
+                    medicine_id,
                     productImg,
                     "",
                     price,
@@ -448,6 +456,9 @@ class Addon(QThread):
 
             productName = self.keyword
 
+            # 药品ID
+            medicine_id = MEDICINE_ID.get(productName, "")
+
             # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
@@ -457,7 +468,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
-                    "",
+                    medicine_id,
                     productImg,
                     "",
                     price,
@@ -499,6 +510,9 @@ class Addon(QThread):
 
             productName = self.keyword
 
+            # 药品ID
+            medicine_id = MEDICINE_ID.get(productName, "")
+
             # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
@@ -508,7 +522,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
-                    "",
+                    medicine_id,
                     productImg,
                     "",
                     price,
@@ -698,6 +712,9 @@ class Addon(QThread):
 
                 productName = self.keyword
 
+                # 药品ID
+                medicine_id = MEDICINE_ID.get(productName, "")
+
                 # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
                 datas.append(
                     [
@@ -707,7 +724,7 @@ class Addon(QThread):
                         "",
                         "",
                         productName,
-                        "",
+                        medicine_id,
                         productImg,
                         original_price,
                         price,
@@ -780,6 +797,9 @@ class Addon(QThread):
 
             productName = self.keyword
 
+            # 药品ID
+            medicine_id = MEDICINE_ID.get(productName, "")
+
             # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
             datas.append(
                 [
@@ -789,7 +809,7 @@ class Addon(QThread):
                     "",
                     "",
                     productName,
-                    "",
+                    medicine_id,
                     productImg,
                     "",
                     price,
@@ -835,6 +855,9 @@ class Addon(QThread):
 
                 productName = self.keyword
 
+                # 药品ID
+                medicine_id = MEDICINE_ID.get(productName, "")
+
                 # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期
                 datas.append(
                     [
@@ -844,7 +867,7 @@ class Addon(QThread):
                         "",
                         "",
                         productName,
-                        "",
+                        medicine_id,
                         productImg,
                         "",
                         price,
