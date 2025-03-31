@@ -18,7 +18,7 @@ from openpyxl.drawing.image import Image
 from PIL import Image as PILImage
 from PySide6.QtCore import QThread, Signal
 
-from medicineID import MEDICINE_ID
+from utils.medicineID import MEDICINE_ID
 
 
 class Addon(QThread):
