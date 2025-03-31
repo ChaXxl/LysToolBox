@@ -752,19 +752,6 @@ class Addon(QThread):
         self.save_to_excel(datas, "饿了么")
         # self.save.to_excel(datas, "饿了么")
 
-    # 饿了么营业执照
-    def ele_certificate(self, res):
-        img_url = (
-            res.get("data")
-            .get("data")
-            .get("shopNewQualification", [])[0]
-            .get("qualificationPic")[0]
-        )
-        pyperclip.copy(img_url)
-
-        msg = img_url
-        self.add_text.emit(msg)
-
     def request(self, flow: http.HTTPFlow) -> None:
         url = flow.request.url
 
@@ -919,18 +906,3 @@ class Addon(QThread):
             self.add_text.emit(msg)
 
             self.ele(res)
-        # 饿了么营业执照
-        elif re.match(
-            "https://waimai-guide.ele.me/h5/mtop.venus.shopservice.getshopqualification/1.1/5.0/*",
-            url,
-        ):
-            try:
-                res = flow.response.json()
-            except:
-                return
-
-            msg = f'\n饿了么营业执照 {url.split("?")[0]}\n'
-            self.add_text.emit(msg)
-
-            # self.thread.submit(self.ele_certificate, res)
-            self.ele_certificate(res)
