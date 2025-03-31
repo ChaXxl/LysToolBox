@@ -1,6 +1,5 @@
 import json
 import re
-import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -9,7 +8,6 @@ from typing import Optional, List, Dict, Any, Union
 import httpx
 import openpyxl
 import pandas as pd
-import pyperclip
 import shortuuid
 from loguru import logger
 from lxml import etree
