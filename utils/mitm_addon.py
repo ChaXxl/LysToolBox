@@ -837,19 +837,6 @@ class Addon(QThread):
 
             self.pdd_xhr(res)
 
-        # 拼多多手机端营业执照
-        elif re.match(r".*water-mark-permanent.*\.jpg", url):
-            msg = f"\n 拼多多手机端营业执照 {url[:50]}\n\n"
-            self.add_text.emit(msg)
-
-            pyperclip.copy(url)
-
-            # http://212.129.222.100/water-mark-permanent/2024-03-18/3409c98f-9966-443e-951d-ff7a4d5249f7.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DQbMVmGwmGG4ve7SCRIvVVE9kmEUJ1btV%26q-sign-time%3D1711249652%3B1711253252%26q-key-time%3D1711249652%3B1711253252%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D913cd7e3b81cad0b455b89b416bb1cd5231da18e&host=pfs.pinduoduo.com
-            # https://pfs.pinduoduo.com/water-mark-permanent/2024-03-18/3409c98f-9966-443e-951d-ff7a4d5249f7.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DQbMVmGwmGG4ve7SCRIvVVE9kmEUJ1btV%26q-sign-time%3D1711249652%3B1711253252%26q-key-time%3D1711249652%3B1711253252%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D913cd7e3b81cad0b455b89b416bb1cd5231da18e
-            # http://pfs.pinduoduo.com/water-mark-permanent/2024-03-18/3409c98f-9966-443e-951d-ff7a4d5249f7.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DQbMVmGwmGG4ve7SCRIvVVE9kmEUJ1btV%26q-sign-time%3D1711249652%3B1711253252%26q-key-time%3D1711249652%3B1711253252%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D913cd7e3b81cad0b455b89b416bb1cd5231da18e
-            # self.thread.submit(self.pdd_app_certificate, url)
-            self.pdd_app_certificate(url)
-
         # 美团
         elif re.match("https://i.waimai.meituan.com/openh5/search/globalpage*", url):
             res = flow.response.json()
