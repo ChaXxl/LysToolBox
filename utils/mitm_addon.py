@@ -538,74 +538,6 @@ class Addon(QThread):
         self.save_to_excel(datas, "拼多多")
         # self.save.to_excel(datas, "拼多多")
 
-    # 拼多多手机端搜索结果
-    def pdd_mobild_search(self, res, headers):
-        """
-        解析拼多多手机端搜索结果
-        """
-        if res.get("items") is None or res["items"].get("item_data") is None:
-            return
-
-        datas = []
-
-        for item in res.get("items"):
-            product = item.get("item_data").get("goods_model")
-
-            productName = product.get("goods_name")  # 药品名称
-            goods_id = product.get("goods_id")  # 商品 ID
-
-            # if '乐药师' not in productName:
-            # if '一口' not in productName:
-            # if self.product_name_not not in productName:
-            if not self.check_brand_product_name(productName):
-                continue
-
-            storeUrl = f'https://mobile.yangkeduo.com/mall_page.html?mall_id={product.get("mall_id")}'
-            storeName = self.pdd_getStoreName(storeUrl, headers)  # 店铺名称
-
-            if storeName == "乐药师大药房旗舰店":
-                continue
-
-            productImg = product.get("hd_thumb_url")  # 药品图片
-
-            price = product.get("price_info")  # 挂网价格
-
-            original_price = ""  # 原价
-
-            t = time.strftime("%Y-%m-%d", time.localtime())  # 排查日期
-
-            # productName = self.product_name_not
-
-            productName = self.keyword
-
-            # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
-            datas.append(
-                [
-                    "",
-                    storeName,
-                    storeUrl,
-                    "",
-                    "",
-                    productName,
-                    productImg,
-                    original_price,
-                    price,
-                    " 美团",
-                    t,
-                ]
-            )
-
-            if "乐药师" in productName:
-                msg = f"{storeName} {productName} {price} 拼多多 {t}"
-                self.add_text.emit(msg)
-
-        if datas is None:
-            return
-
-        # self.thread.submit(self.save_to_excel, datas, '拼多多')
-        self.save_to_excel(datas, "拼多多")
-        # self.save.to_excel(datas, "拼多多")
-
     def meituan(self, res):
         """
         解析美团
@@ -930,14 +862,6 @@ class Addon(QThread):
             # http://pfs.pinduoduo.com/water-mark-permanent/2024-03-18/3409c98f-9966-443e-951d-ff7a4d5249f7.jpg?sign=q-sign-algorithm%3Dsha1%26q-ak%3DQbMVmGwmGG4ve7SCRIvVVE9kmEUJ1btV%26q-sign-time%3D1711249652%3B1711253252%26q-key-time%3D1711249652%3B1711253252%26q-header-list%3D%26q-url-param-list%3D%26q-signature%3D913cd7e3b81cad0b455b89b416bb1cd5231da18e
             # self.thread.submit(self.pdd_app_certificate, url)
             self.pdd_app_certificate(url)
-
-        # 拼多多手机端搜索结果
-        elif re.match("https://api.pinduoduo.com/search?source=index&pdduid*", url):
-            res = flow.response.json()
-            msg = f"\n拼多多手机端搜索结果 {url[:50]}\n"
-            self.add_text.emit(msg)
-
-            self.pdd_mobild_search(res, headers)
 
         # 美团
         elif re.match("https://i.waimai.meituan.com/openh5/search/globalpage*", url):
