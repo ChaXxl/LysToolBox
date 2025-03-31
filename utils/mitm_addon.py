@@ -142,21 +142,6 @@ class Addon(QThread):
 
         self.add_text.emit(msg)
 
-    # def check_brand_product_name(self, name: str) -> bool:
-    #     product_name_temp = self.product_name_not.replace("乐药师", "").replace(
-    #         "白云山", ""
-    #     )
-    #
-    #     if len(product_name_temp) > 2:
-    #         product_name_temp = product_name_temp[0:2]
-    #
-    #     if self.brand_name_not in name and product_name_temp in name:
-    #         return True
-    #
-    #     return False
-    #
-    #     # return True
-
     def check_brand_product_name(self, name: str) -> bool:
         keywords = self.keyword.split(" ")
         self.brand_name, self.medicine_name = keywords[:-1], keywords[-1]
