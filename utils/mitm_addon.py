@@ -606,36 +606,6 @@ class Addon(QThread):
         self.save_to_excel(datas, "拼多多")
         # self.save.to_excel(datas, "拼多多")
 
-    # 拼多多手机端营业执照
-    def pdd_app_certificate(self, url):
-        url = re.sub("http", "https", url)
-
-        pyperclip.copy(url)
-        # logger.info(url)
-        msg = url
-        self.add_text.emit(msg)
-
-        # 拼多多营业执照
-
-    def pdd_certificate(self, res):
-        mall_name = res.get("mall_name")
-        business_licence_url = res.get("mall_business_licence_info").get(
-            "business_licence_url"
-        )
-
-        msg = f"{mall_name} {business_licence_url}"
-        self.add_text.emit(msg)
-
-        # pyperclip.copy(mall_name)
-        # time.sleep(1)
-        pyperclip.copy(business_licence_url)
-        # subprocess.Popen('shortcuts run "OpenEdge"', shell=True)
-        # pyautogui.hotkey('command', 't')
-
-        # self.thread.submit(pdd_saveCertificate, mall_name, business_licence_url)
-
-        # 美团
-
     def meituan(self, res):
         """
         解析美团
@@ -947,16 +917,6 @@ class Addon(QThread):
             self.add_text.emit(msg)
 
             self.pdd_xhr(res)
-
-        # 拼多多营业执照
-        elif re.match(r"query_mall_licence_certificate", url):
-            res = flow.response.json()
-
-            msg = f"\n拼多多营业执照 {url[:50]}\n"
-            self.add_text.emit(msg)
-
-            # self.thread.submit(self.pdd_certificate, res)
-            self.pdd_certificate(res)
 
         # 拼多多手机端营业执照
         elif re.match(r".*water-mark-permanent.*\.jpg", url):
