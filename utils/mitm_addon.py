@@ -538,19 +538,6 @@ class Addon(QThread):
         self.save_to_excel(datas, "拼多多")
         # self.save.to_excel(datas, "拼多多")
 
-    def pdd_saveCertificate(self, mall_name, business_licence_url):
-        # 搜索 Excel 表格第 1 列找到对应的店铺名称以及第 8 列是拼多多，将营业执照链接保存到 Excel 表格中
-        for row in self.sheet.iter_rows(
-            min_row=2, max_row=self.sheet.max_row, min_col=1, max_col=8
-        ):
-            if row[1].value == mall_name and row[9].value == "拼多多":
-                self.sheet.cell(row[0].row, 4).value = mall_name
-                self.sheet.cell(row[0].row, 5).value = business_licence_url
-                break
-
-        msg = f"{mall_name} {business_licence_url}"
-        self.add_text.emit(msg)
-
     # 拼多多手机端搜索结果
     def pdd_mobild_search(self, res, headers):
         """
