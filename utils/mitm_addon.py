@@ -142,29 +142,6 @@ class Addon(QThread):
 
         self.add_text.emit(msg)
 
-    def isDeduplicate(self, data: list) -> bool:
-        """
-        :return: 返回 bool 值. 如果有重复的就返回 True, 没有重复数据就返回 False
-        """
-        repeat_flag = False  # 是否有重复数据
-
-        cols = (2, 3, 6, 7, 8, 9, 10)  # 第几列
-
-        for row in self.sheet.iter_rows(min_row=2):
-            try:
-                excel_data = tuple(row[c - 1].value for c in cols)
-                save_data = [data[c - 1] for c in cols]
-
-                if save_data == excel_data:
-                    repeat_flag = True
-                    break
-            except Exception as e:
-                msg = f"重复数据判断出错: {e}"
-                self.add_text.emit(msg)
-                continue
-
-        return repeat_flag
-
     # def check_brand_product_name(self, name: str) -> bool:
     #     product_name_temp = self.product_name_not.replace("乐药师", "").replace(
     #         "白云山", ""
