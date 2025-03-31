@@ -884,9 +884,6 @@ class Addon(QThread):
                     ]
                 )
 
-                msg = f"{storeName} {productName} {price} 饿了么 {t}"
-                self.add_text.emit(msg)
-
         if datas is None:
             return
 
