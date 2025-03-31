@@ -17,3 +17,8 @@ shortuuid
 psycopg[binary,pool]
 # python-magic
 filetype
+
+pillow
+lxml
+pillow-avif-plugin
+polars
