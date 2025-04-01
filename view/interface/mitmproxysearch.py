@@ -300,7 +300,7 @@ class MitmProxySearchInterface(GalleryInterface):
         self.worker.addon.keyword = keyword
 
         filename = Path(self.lineEdit_output_path.text()) / f"{keyword}.xlsx"
-        self.worker.addon.createExcel(filename)
+        self.worker.addon.filename = filename
 
         self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
 
@@ -460,5 +460,6 @@ class MitmProxySearchInterface(GalleryInterface):
             self.worker.setProgressInfo.connect(self.setProgressInfo)
 
             self.worker.addon.keyword = keyword
+            self.worker.addon.filename = filename
 
             self.worker.start()
