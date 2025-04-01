@@ -3,7 +3,6 @@ import random
 import re
 import time
 from pathlib import Path
-from typing import Optional
 
 from DrissionPage import Chromium
 from PySide6.QtCore import Signal
@@ -20,7 +19,7 @@ class TB:
         self.keyword = None
         self.save_dir = save_dir
 
-        self.save: Optional[Save] = None
+        self.save = Save()
 
         self.bro = Chromium()
 
@@ -42,7 +41,7 @@ class TB:
 
         return False
 
-    def parse(self, html_str: str):
+    def parse(self, html_str: str, filename: Path = None):
         if type(html_str) is not str:
             return
 
@@ -107,7 +106,7 @@ class TB:
             if not datas:
                 return
 
-            self.save.to_excel(datas, "淘宝天猫")
+            self.save.to_excel(filename, datas, "淘宝天猫")
 
         except Exception as e:
             self.logInfo.emit(f"解析淘宝搜索结果出错: {self.keyword} {e}")
@@ -128,7 +127,6 @@ class TB:
 
         filename = self.save_dir / f"{self.keyword}.xlsx"
 
-        self.save = Save(filename)
         self.save.logInfo = self.logInfo
 
         tab = self.bro.latest_tab
@@ -227,4 +225,4 @@ class TB:
 
             # 解析 xhr 结果
             self.logInfo.emit("解析淘宝搜索结果")
-            self.parse(html_str)
+            self.parse(html_str, filename=filename)

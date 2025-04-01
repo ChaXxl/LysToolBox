@@ -1,7 +1,6 @@
 import random
 import time
 from pathlib import Path
-from typing import Optional
 
 from DrissionPage import Chromium
 from lxml import etree
@@ -19,7 +18,7 @@ class JD:
         self.keyword = None
         self.save_dir = save_dir
 
-        self.save: Optional[Save] = None
+        self.save = Save()
 
         self.bro = Chromium()
 
@@ -48,7 +47,7 @@ class JD:
         except Exception as e:
             return ""
 
-    def parse_search(self, html_str: str):
+    def parse_search(self, html_str: str, filename: Path):
         html = etree.HTML(html_str)
 
         datas = []
@@ -103,12 +102,12 @@ class JD:
             if not datas:
                 return
 
-            self.save.to_excel(datas, "京东")
+            self.save.to_excel(filename, datas, "京东")
 
         except Exception as e:
             self.logInfo.emit(f"{self.keyword} {e}")
 
-    def parse_xhr(self, html_str: str):
+    def parse_xhr(self, html_str: str, filename: Path):
         """
         1. 一行行删除 jd.html 文件中的内容，直到 <li data-sku= 有这个标签，然后再删除这一行之前的内容，即可得到京东的商品列表
         2. 删除倒数几行的 script 标签
@@ -187,7 +186,7 @@ class JD:
             if not datas:
                 return
 
-            self.save.to_excel(datas, "京东")
+            self.save.to_excel(filename, datas, "京东")
 
         except Exception as e:
             self.logInfo.emit(f"解析京东搜索结果出错 {self.keyword} {e}")
@@ -208,7 +207,6 @@ class JD:
 
         filename = self.save_dir / f"{self.keyword}.xlsx"
 
-        self.save = Save(filename)
         self.save.logInfo = self.logInfo
 
         tab = self.bro.latest_tab
@@ -238,7 +236,7 @@ class JD:
 
         # 解析搜索结果
         self.logInfo.emit("解析京东搜索结果")
-        self.parse_search(html_str)
+        self.parse_search(html_str, filename=filename)
 
         # 往下滑动
         tab.listen.set_targets(
@@ -260,7 +258,7 @@ class JD:
 
             # 解析 xhr 结果
             self.logInfo.emit("解析京东 xhr 结果")
-            self.parse_xhr(res)
+            self.parse_xhr(res, filename=filename)
 
         # 检查是否有下一页
         ele_next_page = tab.ele(".pn-next", timeout=2)
@@ -289,4 +287,4 @@ class JD:
 
             # 解析 xhr 结果
             self.logInfo.emit("解析京东 xhr 结果")
-            self.parse_xhr(res)
+            self.parse_xhr(res, filename=filename)
