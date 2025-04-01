@@ -48,6 +48,7 @@ class MitmProxySearchWorker(QThread):
 
         self.addon = Addon()
         self.addon.add_text = self.logInfo
+        self.addon.save.logInfo = self.logInfo
         self.options = Options(listen_host=proxy_ip, listen_port=proxy_port)
         self.m: Optional[DumpMaster] = None
 
