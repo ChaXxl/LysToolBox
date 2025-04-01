@@ -87,9 +87,9 @@ class Addon(QThread):
 
         return False
 
-    def parsejd2HTML(self, html_str: str) -> None:
+    def jd_xhr(self, html_str: str) -> None:
         """
-        解析京东后30条商品数据
+        解析京东XHR数据
 
         Args:
             html_str: HTML字符串
@@ -411,7 +411,7 @@ class Addon(QThread):
 
     def pdd_xhr(self, res: Dict[str, Any]) -> None:
         """
-        解析拼多多XHR数据
+        解析拼多多 xhr 数据
 
         Args:
             res: JSON响应数据
@@ -751,9 +751,9 @@ class Addon(QThread):
             if not res:
                 return
 
-            msg = f"京东后 30 条数据 {url[:50]}\n"
+            msg = f"京东 xhr 数据 {url[:50]}\n"
             self.add_text.emit(msg)
-            self.thread.submit(self.parsejd2HTML, res)
+            self.thread.submit(self.jd_xhr, res)
 
         # 药房网
         elif re.match(r"https://www.yaofangwang.com/medicine/\d+/*", url):
