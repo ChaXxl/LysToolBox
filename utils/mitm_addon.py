@@ -42,6 +42,7 @@ class Addon(QThread):
 
         # 实例化保存类
         self.save = Save()
+        self.save.logInfo = self.add_text
 
         # 创建线程池，用于并行处理数据保存等耗时操作
         self.thread = ThreadPoolExecutor(max_workers=5)
