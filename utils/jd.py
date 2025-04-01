@@ -6,6 +6,8 @@ from DrissionPage import Chromium
 from lxml import etree
 from PySide6.QtCore import Signal
 
+import shortuuid
+from utils.medicineID import MEDICINE_ID
 from utils.save import Save
 
 
@@ -75,6 +77,10 @@ class JD:
                 storeUrl = "https:" + self.extract_data(li, "./div/div[5]/span/a/@href")
 
                 productName = self.keyword
+
+                # 获取药品ID
+                medicine_id = MEDICINE_ID.get(productName, "")
+
                 price = str(price)
                 productImg = str(productImg)
                 storeName = str(storeName)
@@ -82,17 +88,17 @@ class JD:
                 storeUrl = str(storeUrl)
                 t = time.strftime("%Y-%m-%d", time.localtime())
 
-                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+                # 添加数据
+                # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                 datas.append(
                     [
-                        "",
+                        shortuuid.uuid(),
                         storeName,
                         storeUrl,
                         "",
-                        "",
                         productName,
+                        medicine_id,
                         productImg,
-                        "",
                         price,
                         "京东",
                         t,
