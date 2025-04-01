@@ -6,9 +6,6 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any, Union
 
 import httpx
-from openpyxl import load_workbook
-from openpyxl.styles import Alignment, Font
-import polars as pl
 import shortuuid
 from loguru import logger
 from lxml import etree
