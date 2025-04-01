@@ -87,6 +87,84 @@ class Addon(QThread):
 
         return False
 
+    def jd(self, res: str) -> None:
+        """
+        解析京东搜索结果页面
+
+        Args:
+            res: 响应内容
+        """
+        try:
+            html = etree.HTML(res)
+            datas = []
+
+            for li in html.xpath('//div[@id="J_goodsList"]//li'):
+                try:
+                    # 药品名称
+                    productName = li.xpath("string(./div/div[3]/a/em)")
+
+                    # 检查是否符合搜索条件
+                    if not self.check_brand_product_name(productName):
+                        continue
+
+                    # 提取价格、图片、店铺名称等信息
+                    price = li.xpath("./div/div[2]/strong/i/text()")[0]
+                    productImg = (
+                        "https:"
+                        + li.xpath('./div[1]/div[@class="p-img"]//img/@data-lazy-img')[
+                            0
+                        ]
+                    )
+                    storeName = li.xpath('./div[1]/div[@class="p-shop"]/span/a/@title')[
+                        0
+                    ]
+                    storeUrl = "https:" + li.xpath("./div/div[5]/span/a/@href")[0]
+
+                    # 转为字符串类型
+                    productName = str(productName)
+                    price = str(price)
+                    productImg = str(productImg)
+                    storeName = str(storeName)
+                    storeUrl = str(storeUrl)
+
+                    # 跳过乐药师大药房旗舰店的商品
+                    if storeName == "乐药师大药房旗舰店":
+                        continue
+
+                    # 获取当前日期
+                    t = time.strftime("%Y-%m-%d", time.localtime())
+
+                    # 使用搜索关键词作为产品名
+                    productName = self.keyword
+
+                    # 获取药品ID
+                    medicine_id = MEDICINE_ID.get(productName, "")
+
+                    # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
+                    datas.append(
+                        [
+                            shortuuid.uuid(),
+                            storeName,
+                            storeUrl,
+                            "",
+                            productName,
+                            medicine_id,
+                            productImg,
+                            price,
+                            "京东",
+                            t,
+                        ]
+                    )
+                except Exception as e:
+                    logger.error(f"解析京东商品失败: {e}")
+                    continue
+
+            # 保存数据
+            self.save.to_excel(self.filename, datas, "京东")
+        except Exception as e:
+            logger.error(f"解析京东页面失败: {e}")
+
     def jd_xhr(self, html_str: str) -> None:
         """
         解析京东XHR数据
@@ -189,84 +267,6 @@ class Addon(QThread):
 
         # 保存数据
         self.save.to_excel(self.filename, datas, "京东")
-
-    def jd(self, res: str) -> None:
-        """
-        解析京东搜索结果页面
-
-        Args:
-            res: 响应内容
-        """
-        try:
-            html = etree.HTML(res)
-            datas = []
-
-            for li in html.xpath('//div[@id="J_goodsList"]//li'):
-                try:
-                    # 药品名称
-                    productName = li.xpath("string(./div/div[3]/a/em)")
-
-                    # 检查是否符合搜索条件
-                    if not self.check_brand_product_name(productName):
-                        continue
-
-                    # 提取价格、图片、店铺名称等信息
-                    price = li.xpath("./div/div[2]/strong/i/text()")[0]
-                    productImg = (
-                        "https:"
-                        + li.xpath('./div[1]/div[@class="p-img"]//img/@data-lazy-img')[
-                            0
-                        ]
-                    )
-                    storeName = li.xpath('./div[1]/div[@class="p-shop"]/span/a/@title')[
-                        0
-                    ]
-                    storeUrl = "https:" + li.xpath("./div/div[5]/span/a/@href")[0]
-
-                    # 转为字符串类型
-                    productName = str(productName)
-                    price = str(price)
-                    productImg = str(productImg)
-                    storeName = str(storeName)
-                    storeUrl = str(storeUrl)
-
-                    # 跳过乐药师大药房旗舰店的商品
-                    if storeName == "乐药师大药房旗舰店":
-                        continue
-
-                    # 获取当前日期
-                    t = time.strftime("%Y-%m-%d", time.localtime())
-
-                    # 使用搜索关键词作为产品名
-                    productName = self.keyword
-
-                    # 获取药品ID
-                    medicine_id = MEDICINE_ID.get(productName, "")
-
-                    # 添加数据
-                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
-                    datas.append(
-                        [
-                            shortuuid.uuid(),
-                            storeName,
-                            storeUrl,
-                            "",
-                            productName,
-                            medicine_id,
-                            productImg,
-                            price,
-                            "京东",
-                            t,
-                        ]
-                    )
-                except Exception as e:
-                    logger.error(f"解析京东商品失败: {e}")
-                    continue
-
-            # 保存数据
-            self.save.to_excel(self.filename, datas, "京东")
-        except Exception as e:
-            logger.error(f"解析京东页面失败: {e}")
 
     def yfw(self, res: str) -> None:
         """
