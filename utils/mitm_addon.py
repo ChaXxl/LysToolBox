@@ -168,7 +168,7 @@ class Addon(QThread):
                 # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                 datas.append(
                     [
-                        "",
+                        shortuuid.uuid(),
                         storeName,
                         storeUrl,
                         "",
@@ -247,7 +247,7 @@ class Addon(QThread):
                     # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
-                            "",
+                            shortuuid.uuid(),
                             storeName,
                             storeUrl,
                             "",
@@ -308,7 +308,7 @@ class Addon(QThread):
                     # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
-                            "",
+                            shortuuid.uuid(),
                             storeName,
                             storeUrl,
                             "",
@@ -387,7 +387,7 @@ class Addon(QThread):
                     # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
-                            "",
+                            shortuuid.uuid(),
                             "",
                             storeUrl,
                             "",
@@ -451,7 +451,7 @@ class Addon(QThread):
                     # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
-                            "",
+                            shortuuid.uuid(),
                             "",
                             storeUrl,
                             "",
@@ -533,7 +533,7 @@ class Addon(QThread):
                         # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                         datas.append(
                             [
-                                "",
+                                shortuuid.uuid(),
                                 storeName,
                                 "",
                                 "",
@@ -614,7 +614,7 @@ class Addon(QThread):
                     # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
-                            "",
+                            shortuuid.uuid(),
                             storeName,
                             storeUrl,
                             "",
@@ -689,7 +689,7 @@ class Addon(QThread):
                         # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                         datas.append(
                             [
-                                "",
+                                shortuuid.uuid(),
                                 storeName,
                                 "",
                                 "",

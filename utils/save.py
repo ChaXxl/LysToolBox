@@ -63,16 +63,6 @@ class Save:
         else:
             combined_df = new_data
 
-        # 生成 UUID（只有新增的数据需要）
-        combined_df = combined_df.with_columns(
-            combined_df["uuid"]
-            .map_elements(
-                lambda x: shortuuid.uuid() if x is None or x == "" else x,
-                return_dtype=pl.Utf8,
-            )
-            .alias("uuid")
-        )
-
         # 保存数据到Excel
         try:
             combined_df.write_excel(filename)
