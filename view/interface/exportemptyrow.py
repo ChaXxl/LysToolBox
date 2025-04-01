@@ -2,7 +2,7 @@
 from pathlib import Path
 from typing import Optional, override
 
-import pandas as pd
+import polars as pl
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
 from qfluentwidgets import BodyLabel, InfoBar, InfoBarPosition, PushButton, TextEdit
@@ -31,9 +31,9 @@ class ExportEmptyRowInterfaceWorker(QThread):
             self.logInfo.emit(f"正在导出 {self.excel_path.stem} ...")
 
             df_list.append(
-                pd.read_excel(
+                pl.read_excel(
                     self.excel_path,
-                    usecols=["药店名称", "店铺主页", "资质名称", "平台"],
+                    columns=["药店名称", "店铺主页", "资质名称", "平台"],
                 )
             )
         else:
@@ -44,15 +44,19 @@ class ExportEmptyRowInterfaceWorker(QThread):
                     continue
 
                 df_list.append(
-                    pd.read_excel(
-                        excel_file, usecols=["药店名称", "店铺主页", "资质名称", "平台"]
+                    pl.read_excel(
+                        excel_file, columns=["药店名称", "店铺主页", "资质名称", "平台"]
                     )
                 )
 
         if df_list:
-            df = pd.concat(df_list, ignore_index=True)  # 合并所有 DataFrame
-            df = df[df["资质名称"].isna()].drop_duplicates()  # 筛选 + 去重
-            df.to_excel(f"{self.output_path}/导出结果.xlsx", index=False)  # 保存结果
+            df = pl.concat(df_list, how="vertical")  # 合并所有 DataFrame
+
+            df = df.filter(
+                df["资质名称"].is_in([""]) | df["资质名称"].is_null()
+            ).unique()  # 筛选 + 去重
+
+            df.write_excel(f"{self.output_path}/导出资质名称为空的行.xlsx")  # 保存结果
 
 
 class ExportEmptyRowInterface(GalleryInterface):
