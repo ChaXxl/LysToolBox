@@ -1,7 +1,8 @@
 from pathlib import Path
+from typing import List, Any, Optional
 
 import openpyxl
-import pandas as pd
+import polars as pl
 import shortuuid
 from loguru import logger
 from PySide6.QtCore import Signal
@@ -13,28 +14,18 @@ class Save:
     def __init__(self, filename: Path):
         self.filename = filename
 
-    def to_excel(self, datas: list, tag: str):
-        df = None
+    def to_excel(self, datas: List[List[Any]], tag: Optional[str] = None) -> None:
+        """
+        保存数据到Excel文件
 
-        # 判断文件是否存在, 不存在则新建
-        if not self.filename.exists():
-            workBook = openpyxl.Workbook()  # 创建一个工作簿对象
-        else:
-            workBook = openpyxl.load_workbook(
-                self.filename, keep_vba=True
-            )  # 打开 Excel 表格格
-
-            df = pd.read_excel(self.filename)
-
-        sheet = workBook.active  # 选取第一个sheet
-
-        if datas is None or len(datas) == 0:
+        Args:
+            datas: 要保存的数据列表
+            tag: 标签-指明哪个平台
+        """
+        # 数据为空则直接返回
+        if not datas:
             return
 
-        max_row = sheet.max_row
-        i = 1
-
-        # 表头
         headers = [
             "uuid",
             "药店名称",
@@ -42,6 +33,7 @@ class Save:
             "资质名称",
             "营业执照图片",
             "药品名",
+            "药品ID",
             "药品图片",
             "原价",
             "挂网价格",
@@ -49,45 +41,50 @@ class Save:
             "排查日期",
         ]
 
-        # 如果是第一次保存数据, 就添加表头
-        if max_row == 1:
-            sheet.append(headers)
+        new_data = pl.DataFrame(datas, schema=headers)
+        existing_df: Optional[pl.DataFrame] = None
 
-        save_flag: bool = True
+        #  如果文件存在, 读取数据并去重
+        if self.filename.exists():
+            try:
+                existing_df = pl.read_excel(self.filename)
+            except Exception as e:
+                logger.error(f"读取Excel文件失败: {e}")
+                self.logInfo.emit(f"读取Excel文件失败: {e}\n请检查文件格式或路径")
+                return
 
-        for data in datas:
-            # 重复数据不保存 - 根据药店名称、店铺主页、药品名、挂网价格、平台判断
-            if df is not None:
-                temp_df = df[
-                    (df["药店名称"] == data[1])
-                    & (df["店铺主页"] == data[2])
-                    & (df["药品名"] == data[5])
-                    &
-                    # (df["药品图片"] == data[6]) &
-                    (df["挂网价格"] == float(data[8]))
-                    & (df["平台"] == data[9])
-                ]
+            # 去重
+            combined_df = pl.concat([existing_df, new_data], how="vertical")
+            combined_df = combined_df.unique(
+                subset=["药店名称", "店铺主页", "药品名", "挂网价格", "平台"]
+            )
 
-                if not temp_df.empty:
-                    continue
+        else:
+            combined_df = new_data
 
-            # 生成一个短 UUID
-            short_uuid = shortuuid.uuid()
-            data[0] = short_uuid
+        # 生成 UUID（只有新增的数据需要）
+        combined_df = combined_df.with_columns(
+            combined_df["uuid"]
+            .map_elements(
+                lambda x: shortuuid.uuid() if x is None or x == "" else x,
+                return_dtype=pl.Utf8,
+            )
+            .alias("uuid")
+        )
 
-            sheet.append(data)
-            i += 1
-
-            save_flag = False
-
-        if save_flag:
-            msg = f"{self.filename.stem} {tag}-没有数据需要保存"
-            self.logInfo.emit(msg)
-            logger.info(msg)
+        # 保存数据到Excel
+        try:
+            combined_df.write_excel(self.filename)
+        except Exception as e:
+            logger.error(f"保存数据到Excel失败: {e}")
+            self.logInfo.emit(f"保存数据到Excel失败: {e}\n请检查文件格式或路径")
             return
 
-        workBook.save(self.filename)
+        saved_count = (
+            combined_df.shape[0] - existing_df.shape[0]
+            if existing_df
+            else combined_df.shape[0]
+        )
 
-        msg = f"\n{self.filename.stem} {tag}-保存了{i - 1}条, 数据总条数: {sheet.max_row - 1}\n\n"
+        msg = f"\n\n{self.filename.stem} {tag}-保存了 {saved_count} 条, 数据总条数: {combined_df.shape[0]}\n\n"
         self.logInfo.emit(msg)
-        logger.success(msg)
