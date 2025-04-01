@@ -45,9 +45,11 @@ class FormatWorker(QThread):
             "C": 20,  # 店铺主页
             "D": 50,  # 资质名称
             "E": 35,  # 药品名称
-            "F": 20,  # 挂网价格
-            "G": 15,  # 平台
-            "H": 14,  # 排查日期
+            "F": 15,  # 药品ID
+            "G": 20,  # 药品图片
+            "H": 23,  # 挂网价格
+            "I": 15,  # 平台
+            "J": 18,  # 排查日期
         }
 
         for col, width in column_formats.items():
