@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Optional, override
 
-import pandas as pd
+import polars as pl
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 from PySide6.QtCore import Qt, QThread, Signal, Slot
@@ -63,12 +63,12 @@ class FormatWorker(QThread):
         self.logInfo.emit(f"{excel_path.name} 格式化完成")
 
     def merge_excels(self):
-        all_data: list[pd.DataFrame] = []
+        all_data: list[pl.DataFrame] = []
         for excel_file in self.excel_dir.glob("*.xlsx"):
             try:
                 if any(keyword in excel_file.stem for keyword in ["~", "对照", "排查"]):
                     continue
-                df = pd.read_excel(excel_file, dtype=str)
+                df = pl.read_excel(excel_file)
                 all_data.append(df)
             except Exception as e:
                 self.logInfo.emit(f"{excel_file.name} 读取失败: {e}")
@@ -77,13 +77,13 @@ class FormatWorker(QThread):
             if not all_data:
                 return
 
-            merged_df = pd.concat(all_data, ignore_index=True)
+            merged_df = pl.concat(all_data)
 
             # 去除重复行
-            merged_df.drop_duplicates(subset=["uuid"], inplace=True)
+            merged_df.unique(subset=["uuid"])
 
             # 保存到新文件
-            merged_df.to_excel(self.excel_dir / "合并.xlsx", index=False)
+            merged_df.write_excel(self.excel_dir / "合并.xlsx")
 
     @override
     def run(self):
