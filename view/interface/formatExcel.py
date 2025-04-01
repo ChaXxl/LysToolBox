@@ -18,40 +18,9 @@ from view.interface.gallery_interface import GalleryInterface
 class FormatWorker(QThread):
     logInfo = Signal(str)
 
-    # 删除的列名
-    # COLUMNS_TO_DROP = ["营业执照图片", "药品图片", "原价"]
-    COLUMNS_TO_DROP = ["营业执照图片", "原价"]
-
     def __init__(self, excel_dir: Path):
         super().__init__()
         self.excel_dir = excel_dir
-
-    def rename_cell(self, excel_path: Path):
-        """重命名药品名称列"""
-        df = pd.read_excel(excel_path)
-
-        # 重命名药品名称列
-        df["药品名称"] = "乐药师" + excel_path.stem
-
-        df.to_excel(excel_path, index=False)
-
-        self.logInfo.emit(f"{excel_path.stem} 重命名完成")
-
-    def delete_col(self, excel_path: Path):
-        """删除指定列"""
-        df = pd.read_excel(excel_path)
-
-        # 删除存在的列
-        existing_columns = [col for col in self.COLUMNS_TO_DROP if col in df.columns]
-
-        if not existing_columns:
-            return
-
-        df.drop(columns=existing_columns, inplace=True)
-
-        df.to_excel(excel_path, index=False)
-
-        self.logInfo.emit(f"{excel_path.stem} 删除列完成")
 
     def format_cell(self, excel_path: Path):
         """设置单元格格式"""
@@ -117,8 +86,6 @@ class FormatWorker(QThread):
     @override
     def run(self):
         """按顺序处理 Excel 文件"""
-        futures = {}
-
         # 合并所有 Excel 文件
         self.merge_excels()
 
@@ -130,17 +97,6 @@ class FormatWorker(QThread):
                     ):
                         continue
 
-                    f = t.submit(self.delete_col, excel_file)
-                    futures[f] = excel_file
-
-                except Exception as e:
-                    self.logInfo.emit(f"{self.excel_dir.name} 处理失败: {e}")
-                    continue
-
-            for f in futures:
-                excel_file = futures[f]
-                try:
-                    f.result()
                     t.submit(self.format_cell, excel_file)
                 except Exception as e:
                     self.logInfo.emit(f"{excel_file.name} 处理失败: {e}")
