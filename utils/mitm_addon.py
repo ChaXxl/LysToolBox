@@ -740,7 +740,7 @@ class Addon(QThread):
             res = flow.response.text
             msg = f"\n京东 {url[:50]}\n"
             self.add_text.emit(msg)
-            self.jd(res)
+            self.thread.submit(self.jd, res)
 
         # 京东后30条数据
         elif re.match(
@@ -753,14 +753,14 @@ class Addon(QThread):
 
             msg = f"京东后 30 条数据 {url[:50]}\n"
             self.add_text.emit(msg)
-            self.parsejd2HTML(res)
+            self.thread.submit(self.parsejd2HTML, res)
 
         # 药房网
         elif re.match(r"https://www.yaofangwang.com/medicine/\d+/*", url):
             res = flow.response.text
             msg = f"药房网 {url[:50]}"
             self.add_text.emit(msg)
-            self.yfw(res)
+            self.thread.submit(self.yfw, res)
 
         # 拼多多搜索结果
         elif re.match(r"https://mobile.yangkeduo.com/search_result.html", url):
@@ -770,7 +770,7 @@ class Addon(QThread):
 
             msg = f"\n拼多多 {url[:50]}\n"
             self.add_text.emit(msg)
-            self.pdd(res)
+            self.thread.submit(self.pdd, res)
 
         # 拼多多XHR数据
         elif re.match(r"https://mobile.yangkeduo.com/proxy/api/search*", url):
@@ -781,7 +781,7 @@ class Addon(QThread):
 
                 msg = f"\n拼多多 xhr {url[:50]}\n"
                 self.add_text.emit(msg)
-                self.pdd_xhr(res)
+                self.thread.submit(self.pdd, res)
             except Exception as e:
                 logger.error(f"解析拼多多XHR响应失败: {e}")
                 return
@@ -792,7 +792,7 @@ class Addon(QThread):
                 res = flow.response.json()
                 msg = f"\n美团 {url[:50]}\n"
                 self.add_text.emit(msg)
-                self.meituan(res)
+                self.thread.submit(self.meituan, res)
             except Exception as e:
                 logger.error(f"解析美团响应失败: {e}")
                 return
@@ -805,7 +805,7 @@ class Addon(QThread):
             res = flow.response.text
             msg = f'\n淘宝天猫 {url.split("?")[0]}\n'
             self.add_text.emit(msg)
-            self.taobao(res)
+            self.thread.submit(self.taobao, res)
 
         # 饿了么
         elif re.match(
@@ -826,7 +826,7 @@ class Addon(QThread):
 
                 msg = f'\n饿了么 {url.split("?")[0]}\n'
                 self.add_text.emit(msg)
-                self.ele(res)
+                self.thread.submit(self.ele, res)
             except Exception as e:
                 logger.error(f"解析饿了么响应失败: {e}")
                 return
