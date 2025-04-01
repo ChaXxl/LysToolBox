@@ -459,7 +459,6 @@ class MitmProxySearchInterface(GalleryInterface):
             self.worker.setProgress.connect(self.setProgress)
             self.worker.setProgressInfo.connect(self.setProgressInfo)
 
-            self.worker.addon.createExcel(filename)
             self.worker.addon.keyword = keyword
 
             self.worker.start()

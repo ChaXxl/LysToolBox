@@ -36,8 +36,6 @@ class Addon(QThread):
         self.keyword = None
 
         # Excel相关
-        self.sheet = None
-        self.workBook = None
         self.filename: Optional[Path] = None
 
         # 创建线程池，用于并行处理数据保存等耗时操作
@@ -46,25 +44,6 @@ class Addon(QThread):
         # 药品品牌名和药品名称，从关键词中解析
         self.brand_name = []
         self.medicine_name = ""
-
-    def createExcel(self, filename: Path) -> None:
-        """
-        创建或加载Excel文件
-
-        Args:
-            filename: Excel文件路径
-        """
-        self.filename = filename
-
-        # 判断文件是否存在, 不存在则新建
-        if not filename.exists():
-            self.workBook = openpyxl.Workbook()  # 创建一个工作簿对象
-        else:
-            self.workBook = openpyxl.load_workbook(
-                filename, keep_vba=True
-            )  # 打开Excel表格并保留宏
-
-        self.sheet = self.workBook.active  # 选取第一个sheet
 
     def save_to_excel(self, datas: List[List[Any]], tag: Optional[str] = None) -> None:
         """
