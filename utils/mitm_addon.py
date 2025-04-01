@@ -42,7 +42,6 @@ class Addon(QThread):
 
         # 实例化保存类
         self.save = Save()
-        self.save.logInfo = self.add_text
 
         # 创建线程池，用于并行处理数据保存等耗时操作
         self.thread = ThreadPoolExecutor(max_workers=5)
@@ -169,18 +168,16 @@ class Addon(QThread):
                 medicine_id = MEDICINE_ID.get(productName, "")
 
                 # 添加数据
-                # [uuid, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品ID, 药品图片, 原价, 挂网价格, 平台, 排查日期]
+                # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                 datas.append(
                     [
                         "",
                         storeName,
                         storeUrl,
                         "",
-                        "",
                         productName,
                         medicine_id,
                         productImg,
-                        "",
                         price,
                         "京东",
                         t,
@@ -250,17 +247,16 @@ class Addon(QThread):
                     medicine_id = MEDICINE_ID.get(productName, "")
 
                     # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
                             "",
                             storeName,
                             storeUrl,
                             "",
-                            "",
                             productName,
                             medicine_id,
                             productImg,
-                            "",
                             price,
                             "京东",
                             t,
@@ -312,17 +308,16 @@ class Addon(QThread):
                     medicine_id = MEDICINE_ID.get(productName, "")
 
                     # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
                             "",
                             storeName,
                             storeUrl,
-                            storeName,  # 资质名称默认使用店铺名
                             "",
                             productName,
                             medicine_id,
                             productImg,
-                            "",
                             price,
                             "药房网",
                             t,
@@ -392,17 +387,16 @@ class Addon(QThread):
                     medicine_id = MEDICINE_ID.get(productName, "")
 
                     # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
                             "",
-                            "",  # 店铺名称为空
-                            storeUrl,
                             "",
+                            storeUrl,
                             "",
                             productName,
                             medicine_id,
                             productImg,
-                            "",
                             price,
                             "拼多多",
                             t,
@@ -457,17 +451,16 @@ class Addon(QThread):
                     medicine_id = MEDICINE_ID.get(productName, "")
 
                     # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
                             "",
-                            "",  # 店铺名称为空
-                            storeUrl,
                             "",
+                            storeUrl,
                             "",
                             productName,
                             medicine_id,
                             productImg,
-                            "",
                             price,
                             "拼多多",
                             t,
@@ -540,17 +533,16 @@ class Addon(QThread):
                         medicine_id = MEDICINE_ID.get(productName, "")
 
                         # 添加数据
+                        # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                         datas.append(
                             [
                                 "",
                                 storeName,
-                                "",  # 店铺链接为空
                                 "",
                                 "",
                                 productName,
                                 medicine_id,
                                 productImg,
-                                original_price,
                                 price,
                                 "美团",
                                 t,
@@ -622,17 +614,16 @@ class Addon(QThread):
                     medicine_id = MEDICINE_ID.get(productName, "")
 
                     # 添加数据
+                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                     datas.append(
                         [
                             "",
                             storeName,
                             storeUrl,
                             "",
-                            "",
                             productName,
                             medicine_id,
                             productImg,
-                            "",
                             price,
                             "淘宝天猫",
                             t,
@@ -698,17 +689,16 @@ class Addon(QThread):
                         medicine_id = MEDICINE_ID.get(productName, "")
 
                         # 添加数据
+                        # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                         datas.append(
                             [
                                 "",
                                 storeName,
-                                "",  # 店铺链接为空
                                 "",
                                 "",
                                 productName,
                                 medicine_id,
                                 productImg,
-                                "",
                                 price,
                                 "饿了么",
                                 t,
