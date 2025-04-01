@@ -365,81 +365,6 @@ class Addon(QThread):
         except Exception as e:
             logger.error(f"解析京东页面失败: {e}")
 
-    def jd_saveCertificate(
-        self, platform: str, storeName: str, companyName: str, url: str
-    ) -> None:
-        """
-        保存京东店铺营业执照信息
-
-        Args:
-            platform: 平台名称
-            storeName: 店铺名称
-            companyName: 公司名称
-            url: 营业执照图片链接
-        """
-        flag = True
-
-        # 搜索Excel表格第2列找到对应的店铺名称，将营业执照链接保存到Excel表格中
-        for row in self.sheet.iter_rows(
-            min_row=1, max_row=self.sheet.max_row, min_col=1, max_col=12
-        ):
-            if row[1].value == storeName:
-                flag = False
-
-                # 更新资质名称和营业执照图片
-                self.sheet.cell(row[0].row, 4).value = companyName
-                self.sheet.cell(row[0].row, 5).value = url
-
-                msg = f"\n第 {row[0].row} 行 {storeName} {companyName} {url}"
-                self.add_text.emit(msg)
-
-        if flag:
-            msg = f"\n在Excel中没找到该店铺: {storeName}\n"
-            self.add_text.emit(msg)
-            return
-
-        # 保存工作簿
-        self.workBook.save(self.filename)
-
-    def jd_certificate(self, res: str, url: str) -> None:
-        """
-        解析京东店铺营业执照
-
-        Args:
-            res: 响应内容
-            url: 请求URL
-        """
-        try:
-            html = etree.HTML(res)
-
-            # 提取公司名称
-            companyName = html.xpath('//li[@class="noBorder"][2]/span/text()')
-            if not companyName:
-                return
-
-            companyName = companyName[0]
-
-            # 提取店铺名称
-            try:
-                storeName = re.findall(r'document\.title="(.*?)"', res)
-                if not storeName:
-                    return
-
-                storeName = str(storeName[0]).strip()
-
-                # 检查是否包含政策信息
-                if "根据国家相关政策" in companyName:
-                    return
-
-            except Exception as e:
-                logger.error(f"解析店铺名称失败: {e}")
-                return
-
-            # 保存营业执照信息
-            self.jd_saveCertificate("京东", storeName, companyName, url)
-        except Exception as e:
-            logger.error(f"解析京东营业执照失败: {e}")
-
     def yfw(self, res: str) -> None:
         """
         解析药房网搜索结果
@@ -932,13 +857,6 @@ class Addon(QThread):
             msg = f"京东后 30 条数据 {url[:50]}\n"
             self.add_text.emit(msg)
             self.parsejd2HTML(res)
-
-        # 京东营业执照
-        elif re.match("https://mall.jd.com/showLicence*", url):
-            res = flow.response.text
-            msg = f" 京东营业执照 {url[:50]}"
-            self.add_text.emit(msg)
-            self.jd_certificate(res, url)
 
         # 药房网
         elif re.match(r"https://www.yaofangwang.com/medicine/\d+/*", url):
