@@ -137,7 +137,7 @@ class Addon(QThread):
             else combined_df.shape[0]
         )
 
-        msg = f"\n\n{self.filename.stem} {tag}-保存了{saved_count}条, 数据总条数: {combined_df.shape[0]}\n\n"
+        msg = f"\n\n{self.filename.stem} {tag}-保存了 {saved_count} 条, 数据总条数: {combined_df.shape[0]}\n\n"
         self.add_text.emit(msg)
 
     def check_brand_product_name(self, name: str) -> bool:
