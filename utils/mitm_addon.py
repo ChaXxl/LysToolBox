@@ -3,7 +3,7 @@ import re
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, Dict, Any
 
 import httpx
 import shortuuid
