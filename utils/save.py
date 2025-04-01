@@ -12,14 +12,16 @@ from PySide6.QtCore import Signal
 class Save:
     logInfo = Signal(str)
 
-    def __init__(self, filename: Path):
-        self.filename = filename
+    def __init__(self): ...
 
-    def to_excel(self, datas: List[List[Any]], tag: Optional[str] = None) -> None:
+    def to_excel(
+        self, filename: Path, datas: List[List[Any]], tag: Optional[str] = None
+    ) -> None:
         """
         保存数据到Excel文件
 
         Args:
+            filename: 保存路径
             datas: 要保存的数据列表
             tag: 标签-指明哪个平台
         """
@@ -46,9 +48,9 @@ class Save:
         existing_df: Optional[pl.DataFrame] = None
 
         #  如果文件存在, 读取数据并去重
-        if self.filename.exists():
+        if filename.exists():
             try:
-                existing_df = pl.read_excel(self.filename)
+                existing_df = pl.read_excel(filename)
             except Exception as e:
                 logger.error(f"读取Excel文件失败: {e}")
                 self.logInfo.emit(f"读取Excel文件失败: {e}\n请检查文件格式或路径")
@@ -75,7 +77,7 @@ class Save:
 
         # 保存数据到Excel
         try:
-            combined_df.write_excel(self.filename)
+            combined_df.write_excel(filename)
         except Exception as e:
             logger.error(f"保存数据到Excel失败: {e}")
             self.logInfo.emit(f"保存数据到Excel失败: {e}\n请检查文件格式或路径")
@@ -87,12 +89,12 @@ class Save:
             else combined_df.shape[0]
         )
 
-        msg = f"\n\n{self.filename.stem} {tag}-保存了 {saved_count} 条, 数据总条数: {combined_df.shape[0]}\n\n"
+        msg = f"\n\n{filename.stem} {tag}-保存了 {saved_count} 条, 数据总条数: {combined_df.shape[0]}\n\n"
         self.logInfo.emit(msg)
 
         # 格式化 Excel 文件
         try:
-            wb = load_workbook(self.filename)
+            wb = load_workbook(filename)
             ws = wb.active
 
             # 设置缩放为 100%
@@ -128,7 +130,7 @@ class Save:
                         )
 
             # 保存格式化后的文件
-            wb.save(self.filename)
+            wb.save(filename)
         except Exception as e:
             self.logInfo.emit(f"格式化Excel文件失败: {e}")
             logger.error(f"格式化Excel文件失败: {e}")
