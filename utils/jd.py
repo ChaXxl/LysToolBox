@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 
 from DrissionPage import Chromium
+from DrissionPage.common import Keys
 from lxml import etree
 from PySide6.QtCore import Signal
 
@@ -165,6 +166,10 @@ class JD:
                 storeUrl = "https:" + i.xpath(".//div/div[5]/span/a/@href")[0]
 
                 productName = self.keyword
+
+                # 获取药品ID
+                medicine_id = MEDICINE_ID.get(productName, "")
+
                 price = str(price)
                 productImg = str(productImg)
                 storeName = str(storeName)
@@ -172,17 +177,17 @@ class JD:
                 storeUrl = str(storeUrl)
                 t = time.strftime("%Y-%m-%d", time.localtime())
 
-                # 序号, 药店名称, 店铺主页, 资质名称, 营业执照图片, 药品名, 药品图片, 原价, 挂网价格, 平台, 排查日期
+                # 添加数据
+                # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
                 datas.append(
                     [
-                        "",
+                        shortuuid.uuid(),
                         storeName,
                         storeUrl,
                         "",
-                        "",
                         productName,
+                        medicine_id,
                         productImg,
-                        "",
                         price,
                         "京东",
                         t,
@@ -225,19 +230,20 @@ class JD:
         # 输入搜索关键字
         self.logInfo.emit(f"搜索关键字: {self.keyword}")
         ele_input = tab.ele("#key", timeout=60)
-        ele_input.click()
+        ele_input.click.multi(2)
         ele_input.input(self.keyword)
+        ele_input.input(Keys.ENTER)
 
         # 监听搜索结果
         self.logInfo.emit("开始监听搜索结果...")
 
-        # 点击搜索按钮
-        self.logInfo.emit("点击搜索按钮")
-        ele_search = tab.ele("@@tag()=button@@text()=搜索", timeout=60)
-        ele_search.click()
+        res = tab.listen.wait(timeout=9)
 
-        res = tab.listen.wait(timeout=3)
-        html_str = res.response.body
+        if res:
+            html_str = res.response.body
+        else:
+            html_str = tab.html
+
         self.logInfo.emit("监听到搜索结果")
 
         # 解析搜索结果
