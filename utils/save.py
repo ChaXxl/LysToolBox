@@ -42,7 +42,7 @@ class Save:
             "排查日期",
         ]
 
-        new_data = pl.DataFrame(datas, schema=headers)
+        new_data = pl.DataFrame(datas, schema=headers, orient='row')
         existing_df: Optional[pl.DataFrame] = None
 
         #  如果文件存在, 读取数据并去重
@@ -73,7 +73,7 @@ class Save:
 
         saved_count = (
             combined_df.shape[0] - existing_df.shape[0]
-            if existing_df
+            if existing_df is not None
             else combined_df.shape[0]
         )
 
