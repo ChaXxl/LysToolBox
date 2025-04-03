@@ -103,7 +103,7 @@ class TB:
                         medicine_id,
                         productImg,
                         price,
-                        "京东",
+                        "淘宝",
                         t,
                     ]
                 )
