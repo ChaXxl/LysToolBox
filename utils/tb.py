@@ -183,7 +183,7 @@ class TB:
 
             # 解析搜索结果
             self.logInfo.emit("解析淘宝搜索结果")
-            self.parse(res)
+            self.parse(res, filename=filename)
 
         # 检查是否还有下一页
         ele_next_page = tab.ele("@@tag()=button@@text():下一页", timeout=0.5)
