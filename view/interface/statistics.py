@@ -1,7 +1,7 @@
 # coding:utf-8
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
 from qfluentwidgets import BodyLabel, PushButton, TextBrowser
@@ -33,18 +33,26 @@ class AnalysisWorker(QThread):
 
             total_files += 1
 
-            df = pd.read_excel(excel_file, usecols=["资质名称", "平台"])
+            df = pl.read_excel(excel_file, columns=["资质名称", "平台"])
 
             # 统计总行数
             total_counts_dict[excel_file.stem] = df.shape[0]
 
             # 统计资质名称为空的行数
-            empty_counts = int(df["资质名称"].isna().sum())
+            empty_counts = df.filter(
+                df["资质名称"].is_null() | df["资质名称"].is_in([""])
+            ).shape[0]
             empty_counts_dict[excel_file.stem] = empty_counts
 
             # 统计各平台资质名称为空的行数
-            mask = df["资质名称"].isna()
-            count_dict = df.loc[mask, "平台"].value_counts().to_dict()
+            count_dict = (
+                df.filter(df["资质名称"].is_null() | df["资质名称"].is_in([""]))
+                .group_by("平台")
+                .count()
+                .to_dict(as_series=False)
+            )
+
+            count_dict = dict(zip(count_dict["平台"], count_dict["count"]))
 
             for platform, count in count_dict.items():
                 if platform not in platform_counts_dict:
