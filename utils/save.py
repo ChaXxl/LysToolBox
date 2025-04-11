@@ -42,7 +42,7 @@ class Save:
             "排查日期",
         ]
 
-        new_data = pl.DataFrame(datas, schema=headers, orient='row')
+        new_data = pl.DataFrame(datas, schema=headers, orient="row")
         existing_df: Optional[pl.DataFrame] = None
 
         #  如果文件存在, 读取数据并去重
