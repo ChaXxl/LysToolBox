@@ -592,7 +592,7 @@ class Addon(QThread):
                                 medicine_id,
                                 productImg,
                                 price,
-                                "美团",
+                                "美团（快递）",
                                 t,
                             ]
                         )
@@ -748,7 +748,7 @@ class Addon(QThread):
                                 medicine_id,
                                 productImg,
                                 price,
-                                "饿了么",
+                                "饿了么（快递）",
                                 t,
                             ]
                         )
