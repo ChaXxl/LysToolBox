@@ -54,6 +54,10 @@ class Save:
                 self.logInfo.emit(f"读取Excel文件失败: {e}\n请检查文件格式或路径")
                 return
 
+            # 对齐数据类型, 全部转换为字符串
+            existing_df = existing_df.with_columns(pl.all().cast(pl.Utf8))
+            new_data = new_data.with_columns(pl.all().cast(pl.Utf8))
+
             # 去重
             combined_df = pl.concat([existing_df, new_data], how="vertical")
             combined_df = combined_df.unique(
