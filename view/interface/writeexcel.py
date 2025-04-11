@@ -83,7 +83,7 @@ class GetQuaNameFromDB(QThread):
             for row in sheet.iter_rows(min_row=2):
                 store_name = row[1].value  # 药店名称在第二列
                 store_homepage = row[2].value  # 店铺主页在第三列
-                platform = row[9].value
+                platform = row[8].value
                 qualification_name = row[3].value  # 资质名称在第四列
 
                 # 已有资质名称，不需要更新
