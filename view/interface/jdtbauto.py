@@ -285,6 +285,9 @@ class JdTBbAutoInterface(GalleryInterface):
 
         if keyword:
             # 关键词搜索
+
+            keyword = keyword.strip()
+
             self.worker = JdTbWorker(keyword, None, output_dir)
         elif keywords_path:
             keywords_path = Path(self.lineEdit_keywordPath.text())
