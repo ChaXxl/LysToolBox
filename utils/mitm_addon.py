@@ -339,69 +339,120 @@ class Addon(QThread):
         datas = []
 
         try:
-            # 使用正则表达式提取window.rawData
-            raw_data_match = re.findall(r"window\.rawData=(.*?);document", res)
-            if not raw_data_match:
-                return
+            if isinstance(res, str):
+                # 使用正则表达式提取window.rawData
+                raw_data_match = re.findall(r"window\.rawData=(.*?);document", res)
+                if not raw_data_match:
+                    return
 
-            # 解析JSON数据
-            raw_data = json.loads("".join(raw_data_match))
+                # 解析JSON数据
+                raw_data = json.loads("".join(raw_data_match))
 
-            # 获取商品列表
-            goods_list = (
-                raw_data.get("stores", {})
-                .get("store", {})
-                .get("data", {})
-                .get("ssrListData", {})
-                .get("list", [])
-            )
+                # 获取商品列表
+                goods_list = (
+                    raw_data.get("stores", {})
+                    .get("store", {})
+                    .get("data", {})
+                    .get("ssrListData", {})
+                    .get("list", [])
+                )
 
-            for data in goods_list:
-                try:
-                    mall_id = str(data["mallEntrance"]["mall_id"])
+                for data in goods_list:
+                    try:
+                        mall_id = str(data["mallEntrance"]["mall_id"])
 
-                    # 跳过乐药师大药房旗舰店
-                    if mall_id == "397292525":
+                        # 跳过乐药师大药房旗舰店
+                        if mall_id == "397292525":
+                            continue
+
+                        storeUrl = f"https://mobile.yangkeduo.com/mall_page.html?mall_id={mall_id}"
+                        productName = data.get("goodsName", "")
+
+                        # 检查是否符合搜索条件
+                        if not self.check_brand_product_name(productName):
+                            continue
+
+                        productImg = data.get("imgUrl", "")
+                        price = data.get("priceInfo", "")
+                        t = time.strftime("%Y-%m-%d", time.localtime())
+
+                        # 使用搜索关键词作为产品名
+                        productName = self.keyword
+
+                        # 获取药品ID
+                        medicine_id = MEDICINE_ID.get(productName, "")
+
+                        # 添加数据
+                        # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
+                        datas.append(
+                            [
+                                shortuuid.uuid(),
+                                "",
+                                storeUrl,
+                                "",
+                                productName,
+                                medicine_id,
+                                productImg,
+                                price,
+                                "拼多多",
+                                t,
+                            ]
+                        )
+
+                    except Exception as e:
+                        logger.error(f"解析拼多多商品失败: {e}")
+                        continue
+            elif isinstance(res, dict):
+                goods_list = res.get("items", [])
+
+                for item in goods_list:
+                    try:
+                        data = item.get("item_data", {}).get("goods_model", {})
+
+                        mall_id = str(data["mall_id"])
+
+                        # 跳过乐药师大药房旗舰店
+                        if mall_id == "397292525":
+                            continue
+
+                        storeUrl = f"https://mobile.yangkeduo.com/mall_page.html?mall_id={mall_id}"
+                        productName = data.get("goods_name", "")
+
+                        # 检查是否符合搜索条件
+                        if not self.check_brand_product_name(productName):
+                            continue
+
+                        productImg = data.get("hd_url", "")
+                        price = data.get("price_info", "")
+                        t = time.strftime("%Y-%m-%d", time.localtime())
+
+                        # 使用搜索关键词作为产品名
+                        productName = self.keyword
+
+                        # 获取药品ID
+                        medicine_id = MEDICINE_ID.get(productName, "")
+
+                        # 添加数据
+                        # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
+                        datas.append(
+                            [
+                                shortuuid.uuid(),
+                                "",
+                                storeUrl,
+                                "",
+                                productName,
+                                medicine_id,
+                                productImg,
+                                price,
+                                "拼多多",
+                                t,
+                            ]
+                        )
+
+                    except Exception as e:
+                        logger.error(f"解析拼多多商品失败: {e}")
                         continue
 
-                    storeUrl = (
-                        f"https://mobile.yangkeduo.com/mall_page.html?mall_id={mall_id}"
-                    )
-                    productName = data.get("goodsName", "")
-
-                    # 检查是否符合搜索条件
-                    if not self.check_brand_product_name(productName):
-                        continue
-
-                    productImg = data.get("imgUrl", "")
-                    price = data.get("priceInfo", "")
-                    t = time.strftime("%Y-%m-%d", time.localtime())
-
-                    # 使用搜索关键词作为产品名
-                    productName = self.keyword
-
-                    # 获取药品ID
-                    medicine_id = MEDICINE_ID.get(productName, "")
-
-                    # 添加数据
-                    # [uuid, 药店名称, 店铺主页, 资质名称, 药品名, 药品ID, 药品图片, 挂网价格, 平台, 排查日期]
-                    datas.append(
-                        [
-                            shortuuid.uuid(),
-                            "",
-                            storeUrl,
-                            "",
-                            productName,
-                            medicine_id,
-                            productImg,
-                            price,
-                            "拼多多",
-                            t,
-                        ]
-                    )
-                except Exception as e:
-                    logger.error(f"解析拼多多商品失败: {e}")
-                    continue
         except Exception as e:
             logger.error(f"解析拼多多页面失败: {e}")
 
