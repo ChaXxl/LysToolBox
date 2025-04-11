@@ -311,7 +311,7 @@ class Addon(QThread):
                             shortuuid.uuid(),
                             storeName,
                             storeUrl,
-                            "",
+                            storeName,
                             productName,
                             medicine_id,
                             productImg,
