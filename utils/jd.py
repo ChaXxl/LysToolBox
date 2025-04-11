@@ -232,7 +232,13 @@ class JD:
         ele_input = tab.ele("#key", timeout=60)
         ele_input.click.multi(2)
         ele_input.input(self.keyword)
-        ele_input.input(Keys.ENTER)
+
+        # 点击搜索按钮
+        self.logInfo.emit("点击搜索按钮")
+        ele_search = tab.ele("@@tag()=button@@text()=搜索", timeout=60)
+        ele_search.click()
+
+        time.sleep(2)
 
         # 监听搜索结果
         self.logInfo.emit("开始监听搜索结果...")
