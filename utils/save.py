@@ -67,6 +67,9 @@ class Save:
         else:
             combined_df = new_data
 
+        # 按平台列升序排序
+        combined_df = combined_df.sort("平台")
+
         # 保存数据到Excel
         try:
             combined_df.write_excel(filename)
