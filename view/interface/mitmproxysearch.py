@@ -274,25 +274,6 @@ class MitmProxySearchInterface(GalleryInterface):
         self.label_progress.setText(f"{value}/{total}")
 
     @Slot()
-    def finished(self):
-        # 启用控件
-        self.lineEdit_proxy.setEnabled(True)
-
-        self.lineEdit_excelPath.setEnabled(True)
-        self.btn_select_excel_path.setEnabled(True)
-
-        self.lineEdit_output_path.setEnabled(True)
-        self.btn_select_output_path.setEnabled(True)
-
-        self.btn_start.setText("开始")
-        self.btn_start_flag = False
-
-        if self.stateTooltip is not None:
-            self.stateTooltip.hide()
-
-        self.createSuccessInfoBar("完成", "完成")
-
-    @Slot()
     def set_keyword(self):
         """
         设置关键词
@@ -456,7 +437,6 @@ class MitmProxySearchInterface(GalleryInterface):
             self.textEdit_log.append(f"\n\nExcel 保存在：{filename}\n\n")
 
             self.worker.logInfo.connect(self.logInfo)
-            self.worker.finished.connect(self.finished)
             self.worker.setProgress.connect(self.setProgress)
             self.worker.setProgressInfo.connect(self.setProgressInfo)
 
