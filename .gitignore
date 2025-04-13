@@ -1,5 +1,6 @@
 *.onnx
 *.pt
+*.xlsx
 .DS_Store
 .idea
 build
