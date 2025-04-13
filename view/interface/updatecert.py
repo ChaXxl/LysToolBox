@@ -47,7 +47,10 @@ class UpdateWorker(QThread):
             update_query = (
                 "UPDATE store_info SET qualification_name = %s WHERE store_name = %s"
             )
-            cursor.executemany(update_query, df.values.tolist())
+
+            data_list = df[["资质名称", "药店名称"]].values.tolist()
+
+            cursor.executemany(update_query, data_list)
             conn.commit()
 
             rowcount = cursor.rowcount
