@@ -117,18 +117,6 @@ class GetQuaNameFromDB(QThread):
         except Exception as e:
             self.logInfo.emit(f"处理失败: {excel_file.name} {e}")
 
-    def process_all_excels(self):
-        """处理所有 Excel 文件"""
-        if self.excel_path.is_file():
-            self.readExcel(self.excel_path)
-            return
-
-        for excel_file in self.excel_path.rglob("*.xlsx"):
-            if any(keyword in excel_file.stem for keyword in ["~", "对照", "排查"]):
-                continue
-
-            self.readExcel(excel_file)
-
     @override
     def run(self):
         """运行主程序"""
@@ -136,7 +124,15 @@ class GetQuaNameFromDB(QThread):
         self.cursor = self.conn.cursor()
 
         try:
-            self.process_all_excels()
+            if self.excel_path.is_file():
+                self.readExcel(self.excel_path)
+                return
+
+            for excel_file in self.excel_path.rglob("*.xlsx"):
+                if any(keyword in excel_file.stem for keyword in ["~", "对照", "排查"]):
+                    continue
+
+                self.readExcel(excel_file)
         finally:
             self.conn.close()
 
