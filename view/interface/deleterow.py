@@ -42,6 +42,11 @@ class DeleteRowWorker(QThread):
             # 收集需要删除的行
             rows_to_delete = []
             for row in ws.iter_rows(min_row=2):
+                # 清除该行中所有单元格的超链接
+                for cell in row:
+                    if cell.hyperlink:
+                        cell.hyperlink = None
+
                 self.total_rows += 1
 
                 uuid = row[0].value  # uuid
