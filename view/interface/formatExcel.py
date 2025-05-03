@@ -56,7 +56,16 @@ class FormatWorker(QThread):
             ws.column_dimensions[col].width = width
             for row in ws.iter_rows(min_row=2):
                 for cell in row:
-                    cell.alignment = Alignment(horizontal="center", vertical="center")
+                    # 第 3 列店铺主页居左
+                    if cell.column == 2:
+                        cell.alignment = Alignment(horizontal="left", vertical="center")
+                    # 第 7 列药品图片居左
+                    elif cell.column == 6:
+                        cell.alignment = Alignment(horizontal="left", vertical="center")
+                    else:
+                        cell.alignment = Alignment(
+                            horizontal="center", vertical="center"
+                        )
 
         wb.save(excel_path)
 
@@ -76,6 +85,8 @@ class FormatWorker(QThread):
 
             if not all_data:
                 return
+
+            all_data = [df.with_columns(pl.all().cast(pl.Utf8)) for df in all_data]
 
             merged_df = pl.concat(all_data)
 
