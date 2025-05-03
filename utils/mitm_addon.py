@@ -860,7 +860,7 @@ class Addon(QThread):
 
         # 饿了么
         elif re.match(
-            "https://waimai-guide.ele.me/h5/mtop.relationrecommend.elemetinyapprecommend.recommend*",
+            "https://waimai-guide.ele.me/h5/mtop.relationrecommend.tinyapprecommend.recommend*",
             url,
         ):
             try:
