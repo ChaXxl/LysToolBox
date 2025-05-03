@@ -81,6 +81,11 @@ class GetQuaNameFromDB(QThread):
 
             # 遍历 Excel 行，更新资质名称
             for row in sheet.iter_rows(min_row=2):
+                # 清除该行中所有单元格的超链接
+                for cell in row:
+                    if cell.hyperlink:
+                        cell.hyperlink = None
+
                 store_name = row[1].value  # 药店名称在第二列
                 store_homepage = row[2].value  # 店铺主页在第三列
                 platform = row[8].value
@@ -103,7 +108,7 @@ class GetQuaNameFromDB(QThread):
 
                 # 更新 Excel 表格中的资质名称
                 row[1].value = store_name
-                row[3].value = qualification_name
+                # row[3].value = qualification_name
 
                 # 记录处理的行数
                 self.processed_rows += 1
