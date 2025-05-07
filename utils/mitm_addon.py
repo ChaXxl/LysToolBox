@@ -862,6 +862,9 @@ class Addon(QThread):
         elif re.match(
             "https://waimai-guide.ele.me/h5/mtop.relationrecommend.tinyapprecommend.recommend*",
             url,
+        ) or re.match(
+            "https://waimai-guide.ele.me/h5/mtop.relationrecommend.elemetinyapprecommend.recommend*",
+            url,
         ):
             try:
                 res = flow.response.json()
