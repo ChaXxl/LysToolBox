@@ -108,7 +108,7 @@ class GetQuaNameFromDB(QThread):
 
                 # 更新 Excel 表格中的资质名称
                 row[1].value = store_name
-                # row[3].value = qualification_name
+                row[3].value = qualification_name
 
                 # 记录处理的行数
                 self.processed_rows += 1
