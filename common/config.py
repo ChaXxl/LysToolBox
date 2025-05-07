@@ -46,9 +46,7 @@ class Config(QConfig):
     # 通过 MitmProxy 代理搜索
     mitmProxySearch_host = ConfigItem("MitmProxySearch", "Host", "", "")
     mitmProxySearch_excel_path = ConfigItem("MitmProxySearch", "ExcelPath", "", "")
-    mitmProxySearch_output_path = ConfigItem(
-        "MitmProxySearch", "OutputPath", "", FolderValidator()
-    )
+    mitmProxySearch_output_path = ConfigItem("MitmProxySearch", "OutputPath", "", "")
     mitmProxySearch_keyword = ConfigItem("MitmProxySearch", "Keyword", "", "")
 
     # 自启动
@@ -59,15 +57,13 @@ class Config(QConfig):
 
     # 京东淘宝自动化
     jdtb_keyword_path = ConfigItem("JdTB", "KeywordPath", "", "")
-    jdtb_output_path = ConfigItem("JdTB", "OutputPath", "", FolderValidator())
+    jdtb_output_path = ConfigItem("JdTB", "OutputPath", "", "")
 
     # 下载图片
-    downloadImg_img_path = ConfigItem("downloadImg", "ImgPath", "", FolderValidator())
+    downloadImg_img_path = ConfigItem("downloadImg", "ImgPath", "", "")
 
     # 图片格式转换
-    imgFormatTrans_excel_path = ConfigItem(
-        "ImgFormatTrans", "ExcelPath", "", FolderValidator()
-    )
+    imgFormatTrans_excel_path = ConfigItem("ImgFormatTrans", "ExcelPath", "", "")
 
     # 通过 yolo 识别药品
     yolo_img_path = ConfigItem("Yolo", "ImagePath", "", "")
@@ -75,7 +71,7 @@ class Config(QConfig):
     yolo_output_path = ConfigItem("Yolo", "OutputPath", "", "")
 
     # 删除行
-    deleteRow_excel_path = ConfigItem("DeleteRow", "ExcelPath", "", FolderValidator())
+    deleteRow_excel_path = ConfigItem("DeleteRow", "ExcelPath", "", "")
 
     # 从数据库查询资质写入 Excel
     writeExcel_host = ConfigItem("WriteExcel", "Host", "127.0.0.1", "")
@@ -85,7 +81,7 @@ class Config(QConfig):
     writeExcel_excel_path = ConfigItem("WriteExcel", "ExcelPath", "", "")
 
     # 格式化
-    formatExcel_excel_path = ConfigItem("Format", "ExcelPath", "", FolderValidator())
+    formatExcel_excel_path = ConfigItem("Format", "ExcelPath", "", "")
 
     # 保存 Excel 内容到数据库
     saveToDb_host = ConfigItem("SaveToDb", "Host", "127.0.0.1", "")
@@ -95,17 +91,15 @@ class Config(QConfig):
     saveToDb_excel_path = ConfigItem("SaveToDb", "ExcelPath", "", "")
 
     # 统计数据
-    statistics_excel_path = ConfigItem("Statistics", "ExcelPath", "", FolderValidator())
+    statistics_excel_path = ConfigItem("Statistics", "ExcelPath", "", "")
 
     # 统计新增加的数据
     incrementalDatas_excel_path1 = ConfigItem("IncrementalDatas", "ExcelPath1", "", "")
     incrementalDatas_excel_path2 = ConfigItem("IncrementalDatas", "ExcelPath2", "", "")
-    incrementalDatas_output_path = ConfigItem(
-        "IncrementalDatas", "OutputPath", "", FolderValidator()
-    )
+    incrementalDatas_output_path = ConfigItem("IncrementalDatas", "OutputPath", "", "")
 
     # 查找值
-    searchval_excel_path = ConfigItem("SearchVal", "ExcelPath", "", FolderValidator())
+    searchval_excel_path = ConfigItem("SearchVal", "ExcelPath", "", "")
 
     # 更新数据库的资质名称
     updateCert_host = ConfigItem("UpdateCert", "Host", "127.0.0.1", "")
@@ -117,25 +111,19 @@ class Config(QConfig):
     fiximgsuffix_excel_path = ConfigItem("FixImgSuffix", "ExcelPath", "", "")
 
     # 合并 Excel 文件
-    mergedExcelFiles_excel_path = ConfigItem(
-        "MergedExcelFiles", "ExcelPath", "", FolderValidator()
-    )
-    mergedExcelFiles_output_path = ConfigItem(
-        "MergedExcelFiles", "OutputPath", "", FolderValidator()
-    )
+    mergedExcelFiles_excel_path = ConfigItem("MergedExcelFiles", "ExcelPath", "", "")
+    mergedExcelFiles_output_path = ConfigItem("MergedExcelFiles", "OutputPath", "", "")
 
     # 复查数据
     recheck_excel_path = ConfigItem("ReCheck", "ExcelPath", "")
-    recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", FolderValidator())
+    recheck_output_path = ConfigItem("ReCheck", "OutputPath", "", "")
 
     # 京东营业执照
     searchJdCert_excel_path = ConfigItem("SearchJdCert", "ExcelPath", "", "")
 
     # 导出资质空白的行
     exportEmptyRow_excel_path = ConfigItem("ExportEmptyRow", "ExcelPath", "", "")
-    exportEmptyRow_output_path = ConfigItem(
-        "ExportEmptyRow", "OutputPath", "", FolderValidator()
-    )
+    exportEmptyRow_output_path = ConfigItem("ExportEmptyRow", "OutputPath", "", "")
 
 
 YEAR = 2024
