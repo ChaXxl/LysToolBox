@@ -61,7 +61,7 @@ class TB:
             res = json.loads(res)
 
             for data in res.get("data").get("itemsArray"):
-                if not data.get('ShopInfo'):
+                if not data.get("shopInfo"):
                     continue
 
                 storeName = data.get("shopInfo").get("title")  # 店铺名称
