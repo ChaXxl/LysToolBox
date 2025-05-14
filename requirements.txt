@@ -23,4 +23,4 @@ pillow
 lxml
 pillow-avif-plugin
 polars
-winproxy
+winproxy; sys_platform == "win32"
