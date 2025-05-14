@@ -715,7 +715,7 @@ class Addon(QThread):
                     storeName = restaurant.get("name", "")  # 药店名称
 
                     # 跳过乐药师大药房旗舰店
-                    if storeName == "乐药师大药房旗舰店":
+                    if storeName == "乐药师大药房旗舰店" or "快递" not in storeName:
                         continue
 
                     # 遍历食品列表（药品）
