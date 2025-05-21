@@ -3,7 +3,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, override
 
-from openpyxl.reader.excel import load_workbook
+# from openpyxl.reader.excel import load_workbook
+import polars as pl
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QVBoxLayout, QWidget
 from qfluentwidgets import (
@@ -55,10 +56,10 @@ class JdTbWorker(QThread):
             if not self.keywords_path.exists():
                 return
 
-            wb = load_workbook(self.keywords_path, read_only=True, data_only=True)
-            ws = wb.active
+            df = pl.read_excel(self.keywords_path)
 
-            keywords = [row[1] for row in ws.iter_rows(min_row=2, values_only=True)]
+            # 读取商品名称列不为空的数据保存到 keywords, 还要去除重复
+            keywords = df.filter(pl.col("商品名称").is_not_null())["商品名称"].to_list()
 
         for idx, keyword in enumerate(keywords):
             self.setProgress.emit((idx + 1) // len(keywords) * 100)
