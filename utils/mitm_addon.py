@@ -714,8 +714,11 @@ class Addon(QThread):
 
                     storeName = restaurant.get("name", "")  # 药店名称
 
+                    # 获取配送模式, 判断是否为快递
+                    delivery_mode = restaurant.get("deliveryMode", {}).get("text", "")
+
                     # 跳过乐药师大药房旗舰店
-                    if storeName == "乐药师大药房旗舰店" or "快递" not in storeName:
+                    if storeName == "乐药师大药房旗舰店" or delivery_mode != "快递发货":
                         continue
 
                     # 遍历食品列表（药品）
