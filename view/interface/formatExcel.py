@@ -78,6 +78,10 @@ class FormatWorker(QThread):
                 if any(keyword in excel_file.stem for keyword in ["~", "对照", "排查"]):
                     continue
                 df = pl.read_excel(excel_file)
+
+                # 格式全部转换为字符串
+                df = df.with_columns(pl.all().cast(pl.Utf8))
+
                 all_data.append(df)
             except Exception as e:
                 self.logInfo.emit(f"{excel_file.name} 读取失败: {e}")
