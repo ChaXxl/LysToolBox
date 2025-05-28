@@ -72,7 +72,7 @@ class JD:
                 storeName = self.extract_data(
                     li, './div[1]/div[@class="p-shop"]/span/a/@title'
                 )
-                if storeName == "乐药师大药房旗舰店":
+                if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
                     continue
 
                 storeUrl = "https:" + self.extract_data(li, "./div/div[5]/span/a/@href")
@@ -159,7 +159,7 @@ class JD:
 
                 # 店铺名称
                 storeName = i.xpath('.//div[@class="p-shop"]/span/a/@title')[0]
-                if storeName == "乐药师大药房旗舰店":
+                if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
                     continue
 
                 # 店铺链接

@@ -65,7 +65,7 @@ class TB:
                     continue
 
                 storeName = data.get("shopInfo").get("title")  # 店铺名称
-                if storeName == "乐药师大药房旗舰店":
+                if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
                     continue
 
                 storeUrl = "https:" + data.get("shopInfo").get("url")  # 店铺链接
