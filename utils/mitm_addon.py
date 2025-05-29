@@ -128,7 +128,10 @@ class Addon(QThread):
                     storeUrl = str(storeUrl)
 
                     # 跳过乐药师大药房旗舰店的商品
-                    if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
+                    if (
+                        storeName == "乐药师大药房旗舰店"
+                        or storeName == "乐药师药品专卖店"
+                    ):
                         continue
 
                     # 获取当前日期
@@ -550,7 +553,10 @@ class Addon(QThread):
                     storeName = data.get("name", "")  # 药店名称
 
                     # 跳过乐药师大药房旗舰店
-                    if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
+                    if (
+                        storeName == "乐药师大药房旗舰店"
+                        or storeName == "乐药师药品专卖店"
+                    ):
                         continue
 
                     # 只处理快递电商店铺
@@ -632,7 +638,10 @@ class Addon(QThread):
                     storeName = item.get("shopInfo", {}).get("title", "")  # 店铺名称
 
                     # 跳过乐药师大药房旗舰店
-                    if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店":
+                    if (
+                        storeName == "乐药师大药房旗舰店"
+                        or storeName == "乐药师药品专卖店"
+                    ):
                         continue
 
                     storeUrl = "https:" + item.get("shopInfo", {}).get(
@@ -718,7 +727,11 @@ class Addon(QThread):
                     delivery_mode = restaurant.get("deliveryMode", {}).get("text", "")
 
                     # 跳过乐药师大药房旗舰店
-                    if storeName == "乐药师大药房旗舰店" or storeName == "乐药师药品专卖店" or delivery_mode != "快递发货":
+                    if (
+                        storeName == "乐药师大药房旗舰店"
+                        or storeName == "乐药师药品专卖店"
+                        or delivery_mode != "快递发货"
+                    ):
                         continue
 
                     # 遍历食品列表（药品）
